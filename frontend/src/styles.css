@@ -48,3 +48,21 @@ body {
     font-size: 30px;
     margin-left: 15px;
 }
+
+.blue-button {
+    background-color: #1BA098;
+    color: rgba(255, 255, 255, 0.75);
+    border: none;
+    border-radius: 10px;
+    width: 8vw;
+    height: 5vh;
+}
+
+.yellow-button {
+    background-color: #DEB992;
+    color: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 10px;
+    width: 8vw;
+    height: 5vh;
+}

@@ -1,5 +1,27 @@
 <div class="main-background">
     <app-navbar></app-navbar>
 
-    <h2 class="header-text">Projects Page!</h2>
+    <div class="container">
+        <div class="header-row">
+            <button (click)="goBackToTeams()" class="back-button">&lt; Back</button>
+            <h1 class="projects-header header-text">Projects for *team name here*</h1>
+        </div>
+
+        <div class="new-button-container">
+            <button (click)="newProjectModal()" class="new-button blue-button">New</button>
+        </div>
+
+        <div class="project-container">
+            <div class="project-box">
+                <div class="project-info">
+                    <div class="title-row">
+                        <h3 class="project-title">* Some Project Title *</h3>
+                        <span class="project-status">Active</span>
+                    </div>
+                    <p class="project-description">* Some Project Description *</p>
+                </div>
+                <button class="edit-button yellow-button">Edit</button>
+            </div>
+        </div>
+    </div>
 </div>
