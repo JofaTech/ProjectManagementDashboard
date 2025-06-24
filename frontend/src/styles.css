@@ -1,1 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* This is the text color and font family shown in the wireframe for almost all headers options and titles */
+.header-text {
+    color: #1BA098;
+    font-family: 'Mulish', sans-serif;
+}
+
+/* Wireframe background color */
+.main-background {
+    min-height: 100vh;
+    background-color: #051622;
+}
+
+/* The following options are for the dropdown menu styling used across the website (they all look the same) */
+.dropdown {
+    margin-top: 12px;
+    padding: 20px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Mulish', sans-serif;
+    color: #5533FF;
+    background-color: white;
+    border: none;
+    border-radius: 12px;
+    appearance: none;
+    text-align: center;
+    width: 240px;
+}
+
+.dropdown:focus {
+    outline: none;
+    border-color: #DEB992;
+    box-shadow: 0 0 8px rgba(222, 185, 146, 0.5);
+}
+
+.dropdown option {
+    background-color: white;
+    color: black;
+}

@@ -1,0 +1,14 @@
+<div class="main-background">
+    <div class="select-company-container">
+        <h1 class="select-company-header header-text">Select Company</h1>
+
+        <select [(ngModel)]="selectedCompany" name="company" class="dropdown header-text">
+            <option value="" disabled hidden>Pick an option</option>
+            <option value="cooksystems">Cook Systems</option>
+            <option value="fedex">FedEx</option>
+            <option value="google">Google</option>
+        </select>
+
+        <button (click)="submitCompany()" class="submit-button">Submit</button>
+    </div>
+</div>
