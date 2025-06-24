@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.cooksys.groupfinal.dtos.AnnouncementDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
@@ -42,9 +44,14 @@ public class CompanyController {
 		return companyService.getAllProjects(companyId, teamId);
 	}
 
-    @GetMapping("/company/{companyId}/teams")
-    public Set<TeamDto> getAllTeams(@PathVariable Long companyId) {
-        return companyService.getAllTeams(companyId);
+    @GetMapping("/{companyId}/teams")
+    public Set<TeamDto> getCompanyTeams(@PathVariable Long companyId) {
+        return companyService.getCompanyTeams(companyId);
+    }
+    //post mappings
+    @PostMapping("/{companyId}/teams")
+    public TeamDto postTeamToCompany(@PathVariable Long companyId, @RequestBody TeamDto teamDto) {
+        return companyService.postTeamToCompany(companyId, teamDto);
     }
 
 }
