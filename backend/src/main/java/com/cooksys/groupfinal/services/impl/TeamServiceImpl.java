@@ -24,7 +24,6 @@ public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
     private final ProjectRepository projectRepository;
 
-    private final TeamMapper teamMapper;
     private final ProjectMapper projectMapper;
 
     private Team findTeam(Long id) {
