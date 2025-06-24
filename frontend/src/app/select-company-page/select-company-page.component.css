@@ -6,7 +6,7 @@
 
 .select-company-header {
     font-size: 72px;
-    margin-top: 240px;
+    margin-top: 30vh;
 }
 
 .submit-button {
@@ -21,7 +21,7 @@
     border: 2px solid #1BA098;
     border-radius: 40px;
     cursor: pointer;
-    margin-top: 70px;
+    margin-top: 10vh;
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
