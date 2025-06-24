@@ -42,9 +42,4 @@ public class CompanyController {
 		return companyService.getAllProjects(companyId, teamId);
 	}
 
-    @GetMapping("/company/{companyId}/teams")
-    public Set<TeamDto> getAllTeams(@PathVariable Long companyId) {
-        return companyService.getAllTeams(companyId);
-    }
-
 }
