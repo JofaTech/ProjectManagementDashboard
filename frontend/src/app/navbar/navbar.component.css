@@ -1,3 +1,10 @@
 .navbar {
-  border-bottom: 2px solid #DEB992; /* Customize border style */
+    font-family: 'Mulish', sans-serif;
+    border-bottom: 2px solid #DEB992;
+}
+
+span {
+    color: #F24E1E;
+    font-size: 20px;
+    margin-left: 20px;
 }
