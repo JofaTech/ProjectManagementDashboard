@@ -6,6 +6,7 @@ import com.cooksys.groupfinal.dtos.AnnouncementDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
 import com.cooksys.groupfinal.dtos.TeamDto;
+import com.cooksys.groupfinal.dtos.UserRequestDto;
 
 public interface CompanyService {
 
@@ -20,5 +21,13 @@ public interface CompanyService {
 	Set<TeamDto> getCompanyTeams(Long companyId);
 
 	TeamDto postTeamToCompany(Long companyId, TeamDto teamDto);
+
+    FullUserDto addUser(Long id, UserRequestDto uRequestDto);
+
+	AnnouncementDto addAnnouncement(Long id, AnnouncementDto aDto);
+
+	void removeTeam(Long companyId, Long teamId);
+
+	void deleteAnnouncement(Long companyId, Long announcementId);
 
 }

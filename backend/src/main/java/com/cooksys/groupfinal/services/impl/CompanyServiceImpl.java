@@ -1,7 +1,6 @@
 package com.cooksys.groupfinal.services.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -14,18 +13,22 @@ import com.cooksys.groupfinal.dtos.AnnouncementDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
 import com.cooksys.groupfinal.dtos.TeamDto;
+import com.cooksys.groupfinal.dtos.UserRequestDto;
 import com.cooksys.groupfinal.entities.Announcement;
 import com.cooksys.groupfinal.entities.Company;
 import com.cooksys.groupfinal.entities.Project;
 import com.cooksys.groupfinal.entities.Team;
 import com.cooksys.groupfinal.entities.User;
+import com.cooksys.groupfinal.exceptions.BadRequestException;
 import com.cooksys.groupfinal.exceptions.NotFoundException;
 import com.cooksys.groupfinal.mappers.AnnouncementMapper;
 import com.cooksys.groupfinal.mappers.ProjectMapper;
 import com.cooksys.groupfinal.mappers.TeamMapper;
 import com.cooksys.groupfinal.mappers.FullUserMapper;
+import com.cooksys.groupfinal.repositories.AnnouncementRepository;
 import com.cooksys.groupfinal.repositories.CompanyRepository;
 import com.cooksys.groupfinal.repositories.TeamRepository;
+import com.cooksys.groupfinal.repositories.UserRepository;
 import com.cooksys.groupfinal.services.CompanyService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,30 +36,49 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
-	
+
 	private final CompanyRepository companyRepository;
 	private final TeamRepository teamRepository;
+	private final UserRepository userRepository;
+	private final AnnouncementRepository announcementRepository;
+
 	private final FullUserMapper fullUserMapper;
 	private final AnnouncementMapper announcementMapper;
 	private final TeamMapper teamMapper;
 	private final ProjectMapper projectMapper;
-	
+
 	private Company findCompany(Long id) {
-        Optional<Company> company = companyRepository.findById(id);
-        if (company.isEmpty()) {
-            throw new NotFoundException("A company with the provided id does not exist.");
-        }
-        return company.get();
-    }
-	
+		Optional<Company> company = companyRepository.findById(id);
+		if (company.isEmpty()) {
+			throw new NotFoundException("A company with the provided id does not exist.");
+		}
+		return company.get();
+	}
+
 	private Team findTeam(Long id) {
-        Optional<Team> team = teamRepository.findById(id);
-        if (team.isEmpty()) {
-            throw new NotFoundException("A team with the provided id does not exist.");
-        }
-        return team.get();
-    }
-	
+		Optional<Team> team = teamRepository.findById(id);
+		if (team.isEmpty()) {
+			throw new NotFoundException("A team with the provided id does not exist.");
+		}
+		return team.get();
+	}
+
+	private User findUser(Long id) {
+		Optional<User> user = userRepository.findById(id);
+		if (user.isEmpty()) {
+			throw new NotFoundException("A user with the provided id does not exist.");
+		}
+		return user.get();
+	}
+
+	private Announcement findAnnouncement(Long id) {
+		Optional<Announcement> announcement = announcementRepository.findById(id);
+		if (announcement.isEmpty()) {
+			throw new NotFoundException("An announcement with the provided id does not exist.");
+		}
+		return announcement.get();
+	}
+
 	@Override
 	public Set<FullUserDto> getAllUsers(Long id) {
 		Company company = findCompany(id);
@@ -86,7 +108,8 @@ public class CompanyServiceImpl implements CompanyService {
 		Company company = findCompany(companyId);
 		Team team = findTeam(teamId);
 		if (!company.getTeams().contains(team)) {
-			throw new NotFoundException("A team with id " + teamId + " does not exist at company with id " + companyId + ".");
+			throw new NotFoundException(
+					"A team with id " + teamId + " does not exist at company with id " + companyId + ".");
 		}
 		Set<Project> filteredProjects = new HashSet<>();
 		team.getProjects().forEach(filteredProjects::add);
@@ -108,5 +131,58 @@ public class CompanyServiceImpl implements CompanyService {
         team = teamRepository.save(team);
         return teamMapper.entityToDto(team);
     }
+
+	@Override
+	public FullUserDto addUser(Long id, UserRequestDto uRequestDto) {
+		Company company = findCompany(id);
+
+		User user = fullUserMapper.requestDtoToEntity(uRequestDto);
+		user.getCompanies().add(company);
+
+		return fullUserMapper.entityToFullUserDto(userRepository.saveAndFlush(user));
+
+	}
+
+	@Override
+	public AnnouncementDto addAnnouncement(Long id, AnnouncementDto aDto) {
+		Company company = findCompany(id);
+		User author = findUser(aDto.getAuthor().getId());
+
+		Announcement announcement = announcementMapper.dtoToEntity(aDto);
+		announcement.setCompany(company);
+		announcement.setAuthor(author);
+
+		return announcementMapper.entityToDto(announcementRepository.saveAndFlush(announcement));
+	}
+
+	@Override
+	public void removeTeam(Long companyId, Long teamId) {
+		Company company = findCompany(companyId);
+		Team team = findTeam(teamId);
+
+		company.getTeams().remove(team);
+		team.setCompany(null);
+
+		team.getTeammates().clear();
+		team.getProjects().clear();
+
+		teamRepository.delete(team);
+	}
+
+	@Override
+	public void deleteAnnouncement(Long companyId, Long announcementId) {
+		Company company = findCompany(companyId);
+		Announcement announcement = findAnnouncement(announcementId);
+
+		if (!announcement.getCompany().getId().equals(company.getId())) {
+			throw new BadRequestException("Announcement does not belong to company");
+		}
+
+		company.getAnnouncements().remove(announcement);
+		announcement.setCompany(null);
+		announcement.setAuthor(null);
+
+		announcementRepository.delete(announcement);
+	}
 
 }
