@@ -2,15 +2,22 @@ package com.cooksys.groupfinal.controllers;
 
 import java.util.Set;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksys.groupfinal.dtos.AnnouncementDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
 import com.cooksys.groupfinal.dtos.TeamDto;
+import com.cooksys.groupfinal.dtos.UserRequestDto;
+import com.cooksys.groupfinal.services.AnnouncementService;
 import com.cooksys.groupfinal.services.CompanyService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,27 +26,51 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/company")
 @RequiredArgsConstructor
 public class CompanyController {
-	
-	private final CompanyService companyService;
-	
-	@GetMapping("/{id}/users")
+
+    private final CompanyService companyService;
+    private final AnnouncementService announcementService;
+
+    @GetMapping("/{id}/users")
     public Set<FullUserDto> getAllUsers(@PathVariable Long id) {
         return companyService.getAllUsers(id);
     }
-	
-	@GetMapping("/{id}/announcements")
+
+    @PostMapping("/{id}/users")
+    @ResponseStatus(HttpStatus.CREATED)
+    public FullUserDto addUser(@PathVariable Long id, @RequestBody UserRequestDto uRequestDto) {
+        return companyService.addUser(id, uRequestDto);
+    }
+
+    @GetMapping("/{id}/announcements")
     public Set<AnnouncementDto> getAllAnnouncements(@PathVariable Long id) {
         return companyService.getAllAnnouncements(id);
     }
-	
-	@GetMapping("/{id}/teams")
+
+    @PostMapping("/{id}/announcements")
+    @ResponseStatus(HttpStatus.CREATED)
+    public AnnouncementDto addAnnouncement(@PathVariable Long id, @RequestBody AnnouncementDto aDto) {
+        return companyService.addAnnouncement(id, aDto);
+    }
+
+    @DeleteMapping("/{companyId}/announcements/{announcementId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAnnouncement(@PathVariable Long companyId, @PathVariable Long announcementId) {
+        companyService.deleteAnnouncement(companyId, announcementId);
+    }
+
+    @GetMapping("/{id}/teams")
     public Set<TeamDto> getAllTeams(@PathVariable Long id) {
         return companyService.getAllTeams(id);
     }
-	
-	@GetMapping("/{companyId}/teams/{teamId}/projects") 
-	public Set<ProjectDto> getAllProjects(@PathVariable Long companyId, @PathVariable Long teamId) {
-		return companyService.getAllProjects(companyId, teamId);
-	}
 
+    @DeleteMapping("/{companyId}/teams/{teamId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeTeam(@PathVariable Long companyId, @PathVariable Long teamId) {
+        companyService.removeTeam(companyId, teamId);
+    }
+
+    @GetMapping("/{companyId}/teams/{teamId}/projects")
+    public Set<ProjectDto> getAllProjects(@PathVariable Long companyId, @PathVariable Long teamId) {
+        return companyService.getAllProjects(companyId, teamId);
+    }
 }
