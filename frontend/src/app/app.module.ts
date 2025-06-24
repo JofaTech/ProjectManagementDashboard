@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { SelectCompanyPageComponent } from './select-company-page/select-company-page.component';
 import { AnnouncementsPageComponent } from './announcements-page/announcements-page.component';
+import { AnnouncementCard } from './announcements-page/announcement-card/announcement-card';
 import { ProjectsPageComponent } from './projects-page/projects-page.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { TeamsPageComponent } from './teams-page/teams-page.component';
@@ -19,6 +20,7 @@ import { UsersPageComponent } from './users-page/users-page.component';
     LoginPageComponent,
     SelectCompanyPageComponent,
     AnnouncementsPageComponent,
+    AnnouncementCard,
     ProjectsPageComponent,
     NavbarComponent,
     TeamsPageComponent,
