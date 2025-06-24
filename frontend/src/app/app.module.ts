@@ -13,7 +13,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { TeamsPageComponent } from './teams-page/teams-page.component';
 import { TeamsCardComponent } from './teams-page/teams-card/teams-card.component';
 import { UsersPageComponent } from './users-page/users-page.component';
-import { CreateAnnouncementComponent } from './announcements-page/create-announcement/create-announcement.component';
+import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { CreateAnnouncementComponent } from './announcements-page/create-announc
     TeamsPageComponent,
     TeamsCardComponent,
     UsersPageComponent,
-    CreateAnnouncementComponent
+    ModalComponent
   ],
   imports: [
     BrowserModule,

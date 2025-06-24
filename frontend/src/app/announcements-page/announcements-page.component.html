@@ -3,8 +3,17 @@
 
     <div class="header">
         <h2 class="header-text">Announcements</h2>
-        <button class="new-announcement-button">New</button>
+        <div class="button-row">
+            <button class="new-button" (click)="openCreateAnnouncement()">New</button>
+        </div>
     </div>
+
+    <!-- Show modal if true -->
+    <app-modal *ngIf="showCreateAnnouncementModal" (close)="closeCreateAnnouncement()">
+        <h3>Create New Announcement</h3>
+        <p>This is the modal for the announcements page</p>
+        <button>Submit</button>
+    </app-modal>
 
     <div class="announcements">
         <app-announcement-card></app-announcement-card>

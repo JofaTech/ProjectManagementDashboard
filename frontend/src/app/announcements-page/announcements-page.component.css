@@ -1,12 +1,30 @@
 .header {
     display: flex;
+    flex-direction: column;
     margin-left: 25%;
     margin-right: 25%;
     padding-top: 50px;
-    padding-bottom: 50px;
-    justify-content: center;
+    padding-bottom: 20px;
+    justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #1BA098;
+}
+
+.button-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.new-button {
+    background: #1BA098;
+    color: #fff;
+    padding: 5px 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    cursor: pointer;
 }
 
 .announcements {
