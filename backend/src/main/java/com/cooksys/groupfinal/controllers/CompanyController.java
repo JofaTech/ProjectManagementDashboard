@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class CompanyController {
 
     private final CompanyService companyService;
-    private final AnnouncementService announcementService;
 
     @GetMapping("/{id}/users")
     public Set<FullUserDto> getAllUsers(@PathVariable Long id) {
@@ -53,7 +52,7 @@ public class CompanyController {
     }
 
     @DeleteMapping("/{companyId}/announcements/{announcementId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAnnouncement(@PathVariable Long companyId, @PathVariable Long announcementId) {
         companyService.deleteAnnouncement(companyId, announcementId);
     }
