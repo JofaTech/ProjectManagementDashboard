@@ -15,4 +15,10 @@ export class AnnouncementsPageComponent {
   closeCreateAnnouncement() {
     this.showCreateAnnouncementModal = false;
   }
+
+  submitNewAnnouncement() {
+    // TODO: Implement POST logic to submit new announcement
+    console.log('submitNewAnnouncement() called. Implementation pending')
+  }
+
 }

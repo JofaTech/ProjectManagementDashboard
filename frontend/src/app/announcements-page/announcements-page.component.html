@@ -11,8 +11,17 @@
     <!-- Show modal if true -->
     <app-modal *ngIf="showCreateAnnouncementModal" (close)="closeCreateAnnouncement()">
         <h3>Create New Announcement</h3>
-        <p>This is the modal for the announcements page</p>
-        <button>Submit</button>
+        <form (ngSubmit)="submitNewAnnouncement()">
+            <label for="title">Title</label>
+            <input id="title" type="text" placeholder="Enter title" />
+
+            <label for="message">Message</label>
+            <textarea id="message" rows="4" placeholder="Enter message"></textarea>
+            <div class="submit-button-row">
+                <button type="submit" class="blue-button">Submit</button>
+            </div>
+        </form>
+
     </app-modal>
 
     <div class="announcements">
