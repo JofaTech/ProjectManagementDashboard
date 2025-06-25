@@ -44,5 +44,56 @@
     <!-- Add User Overlay -->
     <app-modal *ngIf="showUserOverlay" (close)="closeAddUser()">
         <h3>Add New User</h3>
+
+        <!-- User Form -->
+        <form [formGroup]="userForm" (ngSubmit)="submitNewUser()">
+            <!-- First and Last Names -->
+            <div class="form-row">
+                <input type="text" formControlName="firstName" placeholder="first name" />
+                <input type="text" formControlName="lastName" placeholder="last name" />
+            </div>
+
+            <!-- Email Row -->
+            <div class="form-row">
+                <input type="text" formControlName="email" placeholder="email" />
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-row">
+                <input type="tel" formControlName="phone" placeholder="phone" />
+            </div>
+
+            <!-- Password -->
+            <div class="form-row">
+                <input type="password" formControlName="password" placeholder="password" />
+                <input type="password" formControlName="confirmPassword" placeholder="confirm password" />
+            </div>
+
+            <!-- Admin? -->
+            <div class="form-col">
+                <label>Make user an admin role?</label>
+
+                <!-- Dropdown -->
+                <div class="dropdown" (click)="toggleDropdown()">
+                    <div class="dropdown-selected">
+                        {{userForm.get('adminRole')?.value === null ? 'Pick an option' :
+                        userForm.get('adminRole')?.value}}
+                    </div>
+
+                    <div class="dropdown-list" *ngIf="dropdownOpen">
+                        <div class="dropdown-item" (click)="selectRole(true)">true</div>
+                        <div class="dropdown-item" (click)="selectRole(false)">false</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message if passwords don't match -->
+            <div *ngIf="userForm.errors?.['passwordMismatch']" class="error-message">
+                Passwords do not match.
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" [disabled]="userForm.invalid" class="blue-button">Submit</button>
+        </form>
     </app-modal>
 </div>
