@@ -23,7 +23,7 @@
                     </div>
                     <p class="project-description"> {{project.description}} </p>
                 </div>
-                <button class="edit-button yellow-button"> Edit </button>
+                <button class="edit-button yellow-button" (click)="openEditProjectModal(project)"> Edit </button>
             </div>
         </div>
     </div>
@@ -49,5 +49,34 @@
     <!-- Edit Project Modal -->
     <app-modal *ngIf="showEditProjectModal" (close)="closeEditProjectModal()">
         <h3>Edit Project</h3>
+
+        <!-- Modal Form -->
+        <form [formGroup]="editProjectForm" (ngSubmit)="submitEditedProject()">
+            <!-- Text Inputs -->
+            <label for="editProjectName">Project Name</label>
+            <input id="editProjectName" type="text" formControlName="projectName" />
+
+            <label for="editDescription">Description</label>
+            <input id="editDescription" type="text" formControlName="description" />
+
+            <!-- Dropdown -->
+            <label>Active?</label>
+            <div class="dropdown" (click)="toggleStatusDropdown()">
+                <div class="dropdown-selected">
+                    {{editProjectForm.get('status')?.value === null ? 'Pick an option' :
+                    editProjectForm.get('status')?.value}}
+                </div>
+
+                <div class="dropdown-list" *ngIf="statusDropdownOpen">
+                    <div class="dropdown-item" (click)="selectStatus('Yes'); $event.stopPropagation()">Yes</div>
+                    <div class="dropdown-item" (click)="selectStatus('No'); $event.stopPropagation()">No</div>
+                </div>
+            </div>
+
+            <!-- Button -->
+            <button type="submit" [disabled]="editProjectForm.invalid" class="blue-button">
+                Save
+            </button>
+        </form>
     </app-modal>
 </div>

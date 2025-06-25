@@ -16,12 +16,17 @@ interface Project {
 })
 export class ProjectsPageComponent implements OnInit {
 
-  // Modal Bools
-  showCreateProjectModal = false;
-  showEditProjectModal = false;
-
   // Create Project Fields
+  showCreateProjectModal = false;
   newProjectForm!: FormGroup
+
+  // Edit Project Fields
+  showEditProjectModal = false;
+  editProjectForm!: FormGroup;
+  statusDropdownOpen = false;
+
+  // Track project being edited
+  editingProjectId: number | null = null;
 
   teamId!: number;
   teamName!: string;
@@ -35,10 +40,17 @@ export class ProjectsPageComponent implements OnInit {
     this.teamId = +(queryParams.get('id') || 0);
     this.teamName = queryParams.get('name') || 'Unknown Team';
 
-    // Initialize fields for creating projects
+    // Initialize create project form
     this.newProjectForm = this.fb.group({
       projectName: ['', Validators.required],
       description: ['', Validators.required]
+    });
+
+    // Initialize edit project form
+    this.editProjectForm = this.fb.group({
+      projectName: ['', Validators.required],
+      description: ['', Validators.required],
+      status: [null, Validators.required]
     });
 
     // Load Projects
@@ -69,6 +81,7 @@ export class ProjectsPageComponent implements OnInit {
 
   closeCreateProjectModal() {
     this.showCreateProjectModal = false;
+    this.newProjectForm.reset();
   }
 
   submitNewProject() {
@@ -96,12 +109,60 @@ export class ProjectsPageComponent implements OnInit {
   }
 
   // Edit Project Modal Methods
-  openEditProjectModal() {
+  openEditProjectModal(project: Project) {
+    this.editingProjectId = project.id;
     this.showEditProjectModal = true;
+
+    // Populate form with selected project data
+    this.editProjectForm.setValue({
+      projectName: project.title,
+      description: project.description,
+      status: project.status.toLowerCase() === 'active' ? 'Yes' : 'No'
+    });
+
+    this.statusDropdownOpen = false;
   }
 
   closeEditProjectModal() {
     this.showEditProjectModal = false;
+    // Reset project form, id, and such
+    this.editProjectForm.reset();
+    this.editingProjectId = null;
+    this.statusDropdownOpen = false;
+  }
+
+  toggleStatusDropdown() {
+    this.statusDropdownOpen = !this.statusDropdownOpen;
+  }
+
+  selectStatus(value: 'Yes' | 'No') {
+    console.log('selectStatus called with', value);
+
+    this.editProjectForm.patchValue({ status: value });
+    this.toggleStatusDropdown()
+  }
+
+  submitEditedProject() {
+    if (this.editProjectForm.valid && this.editingProjectId !== null) {
+      const editedProjectIndex = this.projects.findIndex(p => p.id === this.editingProjectId);
+      if (editedProjectIndex !== -1) {
+        const updatedProject: Project = {
+          id: this.editingProjectId,
+          title: this.editProjectForm.value.projectName,
+          description: this.editProjectForm.value.description,
+          status: this.editProjectForm.value.status === 'Yes' ? 'Active' : 'Inactive'
+        };
+
+        // Placeholder for POST integration
+        console.log('Updating Project:', updatedProject);
+
+        // Update locally (may not be necessary later)
+        this.projects[editedProjectIndex] = updatedProject;
+
+      }
+
+      this.closeEditProjectModal();
+    }
   }
 
 }
