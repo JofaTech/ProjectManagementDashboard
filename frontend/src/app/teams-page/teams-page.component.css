@@ -38,3 +38,71 @@
     user-select: none;
     margin-bottom: 20px;
 }
+
+/* Modal styling */
+select.dropdown {
+    width: 100%;
+    background: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 6px 4px;
+    font-size: 14px;
+    margin-bottom: 18px;
+    outline: none;
+}
+
+.selected-members {
+    margin-bottom: 20px;
+}
+
+.member-chip {
+    background-color: #1BA098;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+}
+
+.member-chip button {
+    margin-left: 6px;
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0;
+}
+
+.submit-button-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+    margin-top: 12px;
+    color: #c1c5cb;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #757575;
+    padding: 6px 4px;
+    font-size: 14px;
+    color: #ffffff;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
