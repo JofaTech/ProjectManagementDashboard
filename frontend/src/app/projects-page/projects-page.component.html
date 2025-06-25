@@ -4,7 +4,7 @@
     <div class="container">
         <div class="header-row">
             <button (click)="goBackToTeams()" class="back-button">&lt; Back</button>
-            <h1 class="projects-header header-text">Projects for *team name here*</h1>
+            <h1 class="projects-header header-text">Projects for {{teamName}} </h1>
         </div>
 
         <div class="new-button-container">
@@ -12,7 +12,20 @@
         </div>
 
         <div class="project-container">
-            <div class="project-box">
+            <div *ngFor="let project of projects" class="project-box">
+                <div class="project-info">
+                    <div class="title-row">
+                        <h3 class="project-title"> {{project.title}} </h3>
+                        <span class="project-status" [ngClass]="{
+                            'active': project.status.toLowerCase() === 'active',
+                            'inactive': project.status.toLowerCase() === 'inactive'
+                        }"> {{project.status}} </span>
+                    </div>
+                    <p class="project-description"> {{project.description}} </p>
+                </div>
+                <button class="edit-button yellow-button"> Edit </button>
+            </div>
+            <!-- <div class="project-box">
                 <div class="project-info">
                     <div class="title-row">
                         <h3 class="project-title">* Some Project Title *</h3>
@@ -21,7 +34,11 @@
                     <p class="project-description">* Some Project Description *</p>
                 </div>
                 <button class="edit-button yellow-button">Edit</button>
-            </div>
+            </div> -->
         </div>
     </div>
+
+    <!-- Create Project Modal -->
+
+    <!-- Edit Project Modal -->
 </div>

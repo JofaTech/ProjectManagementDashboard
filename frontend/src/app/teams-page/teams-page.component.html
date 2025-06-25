@@ -6,7 +6,9 @@
     <!-- Grid to display the teams cards -->
     <div class="teams-grid">
         <!-- Display each team card -->
-        <app-teams-card *ngFor="let team of teams" [team]="team"></app-teams-card>
+        <div *ngFor="let team of teams" (click)="goToProjects(team.id, team.name)" style="cursor:pointer;">
+            <app-teams-card [team]="team"></app-teams-card>
+        </div>
 
         <!-- New Team card -->
         <div class="new-team" (click)="openNewTeamModal()">

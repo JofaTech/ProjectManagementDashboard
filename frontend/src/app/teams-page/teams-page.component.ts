@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-teams-page',
@@ -9,26 +10,31 @@ export class TeamsPageComponent {
   // Dummy data to represent teams:
   teams = [
     {
+      id: 1,
       name: 'Team 1',
       projectsCount: 4,
       members: ['Chris R.', 'Helena M.', 'Kenny W.', 'Will M.']
     },
     {
+      id: 2,
       name: 'Team2',
       projectsCount: 4,
       members: ['Chris R.', 'Helena M.']
     },
     {
+      id: 3,
       name: 'Team3',
       projectsCount: 4,
       members: ['Will M.', 'Helena M.', 'Kenny W.']
     },
     {
+      id: 4,
       name: 'Team4',
       projectsCount: 2,
       members: ['Kenny W.', 'Helena M.']
     },
     {
+      id: 5,
       name: 'Team5',
       projectsCount: 4,
       members: ['Will M.', 'Kenny W.']
@@ -45,6 +51,13 @@ export class TeamsPageComponent {
   selectedMembers: string[] = [];
 
   showNewTeamModal = false;
+
+  constructor(private router: Router) { }
+
+  // Routing to projects's page
+  goToProjects(teamId: number, teamName: string) {
+    this.router.navigate(['/projects'], { queryParams: { id: teamId, name: teamName } });
+  }
 
   // Methods for selecting + removing members
   onMemberSelected(event: Event) {

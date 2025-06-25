@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-teams-card',
@@ -10,6 +10,11 @@ export class TeamsCardComponent {
     name: string;
     projectsCount: number;
     members: string[]
+  }
+  @Output() clicked = new EventEmitter<void>();
+
+  onCardClick() {
+    this.clicked.emit();
   }
 
 }
