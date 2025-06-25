@@ -112,3 +112,29 @@
         max-width: 65%;
     }
 }
+
+/* Modal Styling */
+label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+    margin-top: 12px;
+    color: #c1c5cb;
+}
+
+input[type="text"] {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #757575;
+    padding: 6px 4px;
+    font-size: 14px;
+    color: #ffffff;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]::placeholder,
+textarea::placeholder {
+    color: #8a9ba8;
+}
