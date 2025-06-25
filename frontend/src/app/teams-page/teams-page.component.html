@@ -1,7 +1,53 @@
 <div class="main-background">
     <app-navbar></app-navbar>
 
-    <h2 class="header-text">Teams Page!</h2>
+    <h2 class="page-title header-text">Teams</h2>
+
+    <!-- Grid to display the teams cards -->
+    <div class="teams-grid">
+        <!-- Display each team card -->
+        <div *ngFor="let team of teams" (click)="goToProjects(team.id, team.name)" style="cursor:pointer;">
+            <app-teams-card [team]="team"></app-teams-card>
+        </div>
+
+        <!-- New Team card -->
+        <div class="new-team" (click)="openNewTeamModal()">
+            <span class="plus-sign">+</span>
+            <span>New Team</span>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <app-modal *ngIf="showNewTeamModal" (close)="closeNewTeamModal()">
+        <h3>Create New Team</h3>
+        <form (ngSubmit)="submitNewTeam()" #teamForm="ngForm">
+            <!-- Text Inputs -->
+            <label for="teamName">Team Name</label>
+            <input id="teamName" name="teamName" type="text" placeholder="Enter team name" [(ngModel)]="teamName" />
+
+            <label for="description">Description</label>
+            <input id="description" name="description" type="text" placeholder="Enter team description"
+                [(ngModel)]="description" />
+
+            <!-- Member Selection -->
+            <p class="select-members">Select Members</p>
+            <select (change)="onMemberSelected($event)" [value]="''" class="dropdown">
+                <option value="" disabled hidden>Pick an option</option>
+                <option *ngFor="let member of availableMembers" [value]="member"> {{member}} </option>
+            </select>
+
+            <!-- Display selected members -->
+            <div class="selected-members">
+                <span class="member-chip" *ngFor="let member of selectedMembers">
+                    {{ member }}
+                    <button type="button" (click)="removeMember(member)">×</button>
+                </span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-button-row">
+                <button type="submit" class="blue-button" [disabled]="!teamForm.form.valid">Submit</button>
+            </div>
+        </form>
+    </app-modal>
 </div>
-
-

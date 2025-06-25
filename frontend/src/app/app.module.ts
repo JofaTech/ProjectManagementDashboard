@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +13,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { TeamsPageComponent } from './teams-page/teams-page.component';
 import { TeamsCardComponent } from './teams-page/teams-card/teams-card.component';
 import { UsersPageComponent } from './users-page/users-page.component';
+import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -25,12 +26,14 @@ import { UsersPageComponent } from './users-page/users-page.component';
     NavbarComponent,
     TeamsPageComponent,
     TeamsCardComponent,
-    UsersPageComponent
+    UsersPageComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
