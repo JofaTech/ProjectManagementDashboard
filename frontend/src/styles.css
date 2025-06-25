@@ -5,6 +5,19 @@ body {
     padding: 0;
 }
 
+/* Styling for page title */
+.page-title {
+    display: flex;
+    flex-direction: column;
+    margin-left: 25%;
+    margin-right: 25%;
+    padding-top: 50px;
+    padding-bottom: 20px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #1BA098;
+}
+
 /* This is the text color and font family shown in the wireframe for almost all headers options and titles */
 .header-text {
     color: #1BA098;

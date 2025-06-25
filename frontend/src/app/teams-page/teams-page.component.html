@@ -1,7 +1,23 @@
 <div class="main-background">
     <app-navbar></app-navbar>
 
-    <h2 class="header-text">Teams Page!</h2>
+    <h2 class="page-title header-text">Teams</h2>
+
+    <!-- Grid to display the teams cards -->
+    <div class="teams-grid">
+        <!-- Display each team card -->
+        <app-teams-card *ngFor="let team of teams" [team]="team"></app-teams-card>
+
+        <!-- New Team card -->
+        <div class="new-team" (click)="openNewTeamModal()">
+            <span class="plus-sign">+</span>
+            <span>New Team</span>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <app-modal *ngIf="showNewTeamModal" (close)="closeNewTeamModal()">
+        <h3>Create New Team</h3>
+
+    </app-modal>
 </div>
-
-

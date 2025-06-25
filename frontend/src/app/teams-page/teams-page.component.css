@@ -1,0 +1,40 @@
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px 0px;
+    justify-items: center;
+    padding-top: 40px;
+}
+
+.new-team {
+    background-color: transparent;
+    border: 2px solid #DEB992;
+    border-radius: 12px;
+    width: 180px;
+    height: 110px;
+    color: #DEB992;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.new-team:hover {
+    border-color: #c09c76;
+    color: #c09c76;
+    transform: scale(1.05);
+}
+
+.plus-sign {
+    font-size: 48px;
+    line-height: 0;
+    user-select: none;
+    margin-bottom: 20px;
+}
