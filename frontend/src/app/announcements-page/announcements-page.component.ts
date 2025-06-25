@@ -21,4 +21,12 @@ export class AnnouncementsPageComponent {
     console.log('submitNewAnnouncement() called. Implementation pending')
   }
 
+  fetchAnnouncements() {
+    fetch(`http://localhost:4200/company/6/announcements`)
+      .then(response => response.json())
+      .then(data => {
+        console.log("announcements: ", data)
+      })
+  }
+
 }
