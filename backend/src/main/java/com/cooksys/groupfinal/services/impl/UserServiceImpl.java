@@ -34,6 +34,9 @@ public class UserServiceImpl implements UserService {
         return user.get();
     }
 	
+    /*
+    uncomment if want to return fulluserdto instead. only need to return basicuser dto for login
+
 	@Override
 	public FullUserDto login(CredentialsDto credentialsDto) {
 		if (credentialsDto == null || credentialsDto.getUsername() == null || credentialsDto.getPassword() == null) {
@@ -50,7 +53,25 @@ public class UserServiceImpl implements UserService {
         }
         return fullUserMapper.entityToFullUserDto(userToValidate);
 	}
-	
+    */
+
+	@Override
+    public BasicUserDto login(CredentialsDto credentialsDto) {
+        if (credentialsDto == null || credentialsDto.getUsername() == null || credentialsDto.getPassword() == null) {
+            throw new BadRequestException("A username and password are required.");
+        }
+        Credentials credentialsToValidate = credentialsMapper.dtoToEntity(credentialsDto);
+        User userToValidate = findUser(credentialsDto.getUsername());
+        if (!userToValidate.getCredentials().equals(credentialsToValidate)) {
+            throw new NotAuthorizedException("The provided credentials are invalid.");
+        }
+        if (userToValidate.getStatus().equals("PENDING")) {
+            userToValidate.setStatus("JOINED");
+            userRepository.saveAndFlush(userToValidate);
+        }
+        return basicUserMapper.entityToDto(userToValidate);
+    }
+
 	
 	
 	
