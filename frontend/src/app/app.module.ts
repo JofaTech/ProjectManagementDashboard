@@ -33,8 +33,7 @@ import { ModalComponent } from './modal/modal.component';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
