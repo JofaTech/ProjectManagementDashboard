@@ -3,6 +3,7 @@ package com.cooksys.groupfinal.controllers;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.cooksys.groupfinal.dtos.CompanyDto;
 import com.cooksys.groupfinal.dtos.AnnouncementDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
@@ -22,7 +24,9 @@ import com.cooksys.groupfinal.dtos.UserRequestDto;
 import com.cooksys.groupfinal.services.AnnouncementService;
 import com.cooksys.groupfinal.services.CompanyService;
 
+
 import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequestMapping("/company")
@@ -59,10 +63,10 @@ public class CompanyController {
         companyService.deleteAnnouncement(companyId, announcementId);
     }
 
-    @GetMapping("/{id}/teams")
-    public Set<TeamDto> getAllTeams(@PathVariable Long id) {
-        return companyService.getAllTeams(id);
-    }
+    // @GetMapping("/{id}/teams")
+    // public Set<TeamDto> getAllTeams(@PathVariable Long id) {
+    //     return companyService.getAllTeams(id);
+    // }
 
     @GetMapping("/{companyId}/teams")
     public Set<TeamDto> getCompanyTeams(@PathVariable Long companyId) {
@@ -83,5 +87,16 @@ public class CompanyController {
     @GetMapping("/{companyId}/teams/{teamId}/projects")
     public Set<ProjectDto> getAllProjects(@PathVariable Long companyId, @PathVariable Long teamId) {
         return companyService.getAllProjects(companyId, teamId);
+    }
+
+    //new routes because we need to get companies that exist in the db
+    @GetMapping("/{id}")
+    public CompanyDto getCompanyById(@PathVariable Long id) {
+        return companyService.getCompanyById(id);
+    }
+
+    @GetMapping()
+    public Set<CompanyDto> getAllCompanies() {
+        return companyService.getAllCompanies();
     }
 }

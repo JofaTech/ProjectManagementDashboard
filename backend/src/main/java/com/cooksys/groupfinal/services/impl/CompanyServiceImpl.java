@@ -30,6 +30,10 @@ import com.cooksys.groupfinal.repositories.CompanyRepository;
 import com.cooksys.groupfinal.repositories.TeamRepository;
 import com.cooksys.groupfinal.repositories.UserRepository;
 import com.cooksys.groupfinal.services.CompanyService;
+import com.cooksys.groupfinal.dtos.CompanyDto;
+import com.cooksys.groupfinal.mappers.CompanyMapper;
+
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
 	private final AnnouncementMapper announcementMapper;
 	private final TeamMapper teamMapper;
 	private final ProjectMapper projectMapper;
+	private final CompanyMapper companyMapper;
 
 	private Company findCompany(Long id) {
 		Optional<Company> company = companyRepository.findById(id);
@@ -97,11 +102,11 @@ public class CompanyServiceImpl implements CompanyService {
 		return announcementMapper.entitiesToDtos(sortedSet);
 	}
 
-	@Override
-	public Set<TeamDto> getAllTeams(Long id) {
-		Company company = findCompany(id);
-		return teamMapper.entitiesToDtos(company.getTeams());
-	}
+	// @Override
+	// public Set<TeamDto> getAllTeams(Long id) {
+	// Company company = findCompany(id);
+	// return teamMapper.entitiesToDtos(company.getTeams());
+	// }
 
 	@Override
 	public Set<ProjectDto> getAllProjects(Long companyId, Long teamId) {
@@ -111,9 +116,23 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new NotFoundException(
 					"A team with id " + teamId + " does not exist at company with id " + companyId + ".");
 		}
+
+		team.getProjects().size();
+		
 		Set<Project> filteredProjects = new HashSet<>();
+
+		System.out.println("---- DEBUG LOG ----");
+		System.out.println("Team ID: " + teamId + ", Total projects: " + filteredProjects.size());
+		for (Project p : filteredProjects) {
+			System.out.println("Project: " + p.getName() + ", Active: " + p.isActive());
+		}
+
 		team.getProjects().forEach(filteredProjects::add);
 		filteredProjects.removeIf(project -> !project.isActive());
+
+		System.out.println("After filtering, active projects count: " + filteredProjects.size());
+		System.out.println("-------------------");
+
 		return projectMapper.entitiesToDtos(filteredProjects);
 	}
 	@Override
@@ -184,5 +203,18 @@ public class CompanyServiceImpl implements CompanyService {
 
 		announcementRepository.delete(announcement);
 	}
+
+	@Override
+	public Set<CompanyDto> getAllCompanies() {
+		return companyMapper.entitiesToDtos(new HashSet<>(companyRepository.findAll()));
+	}
+
+	@Override
+    public CompanyDto getCompanyById(Long id) {
+        return companyMapper.entityToDto(
+            companyRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Company with ID " + id + " not found."))
+        );
+    }
 
 }

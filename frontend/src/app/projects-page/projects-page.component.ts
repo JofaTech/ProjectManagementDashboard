@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProjectDto } from '../services/project.dto';
+import { ProjectService } from '../services/project.service';
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-}
+// interface Project {
+//   id: number;
+//   title: string;
+//   description: string;
+//   status: string;
+// }
 
 @Component({
   selector: 'app-projects-page',
@@ -22,18 +24,27 @@ export class ProjectsPageComponent implements OnInit {
 
   // Create Project Fields
   newProjectForm!: FormGroup
+  editProjectForm!: FormGroup
 
   teamId!: number;
   teamName!: string;
-  projects: Project[] = [];
+  projects: ProjectDto[] = [];
+  companyId!: number;
+  selectedProjectToEdit?: ProjectDto;
 
-  constructor(private route: ActivatedRoute, private router: Router, private fb: FormBuilder) { }
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private fb: FormBuilder,
+    private projectService: ProjectService
+  ) { }
 
   ngOnInit() {
     // Initialize fields for team projects to display
     const queryParams = this.route.snapshot.queryParamMap;
     this.teamId = +(queryParams.get('id') || 0);
     this.teamName = queryParams.get('name') || 'Unknown Team';
+    this.companyId = +(queryParams.get('companyId') || 0);
 
     // Initialize fields for creating projects
     this.newProjectForm = this.fb.group({
@@ -41,21 +52,26 @@ export class ProjectsPageComponent implements OnInit {
       description: ['', Validators.required]
     });
 
+    this.editProjectForm = this.fb.group({
+      projectName: ['', Validators.required],
+      description: ['', Validators.required]
+    })
+
     // Load Projects
-    this.loadProjects(this.teamId);
+    this.loadProjects(this.companyId, this.teamId);
   }
 
-  loadProjects(teamId: number) {
-    const dummyProjects = {
-      1: [
-        { id: 1, title: 'Project 1', description: 'Learn ipsum this project is about stuff', status: 'Active' },
-        { id: 2, title: 'Project 2', description: 'Learn ipsum this project is about stuff', status: 'Active' },
-        { id: 3, title: 'Project 3', description: 'Learn ipsum this project is about stuff', status: 'Inactive' },
-        { id: 4, title: 'Project 4', description: 'Learn ipsum this project is about stuff', status: 'Active' },
-      ]
-    };
+  loadProjects(companyId: number, teamId: number) {
+    
+    this.projectService.getProjectsByTeamId(companyId, teamId).subscribe({
+      next: (data) => {
+        this.projects = data;
+      },
+      error: (err) => {
+        console.error('Failed to load projects: ', err);
+      }
+    })
 
-    this.projects = dummyProjects[teamId as unknown as keyof typeof dummyProjects] || [];
   }
 
   goBackToTeams() {
@@ -74,29 +90,63 @@ export class ProjectsPageComponent implements OnInit {
   submitNewProject() {
     // Check for valid new project form before creatingnew project
     if (this.newProjectForm.valid) {
-      const newProject = {
-        title: this.newProjectForm.value.projectName,
+      const newProject: ProjectDto = {
+        name: this.newProjectForm.value.projectName,
         description: this.newProjectForm.value.description,
-        status: 'Active'
+        active: true
       };
 
-      // Log project to submit for now
-      console.log('New project to submit:', newProject);
-
-      // POST integration shall go here somewhere
-
-      // Add new project to local list (for now, may not be necessary after integration)
-      this.projects.push({
-        id: this.projects.length + 1,
-        ...newProject
+      this.projectService.postProjectToTeam(this.teamId, newProject).subscribe({
+        next: (createdProject) => {
+          this.projects.push(createdProject);
+          this.closeCreateProjectModal();
+          this.newProjectForm.reset();
+        },
+        error: (err) => {
+          console.error('Failed to create project: ', err);
+        }
       });
+    }
+  }
 
-      this.closeCreateProjectModal();
+  submitEditProject() {
+    if (this.selectedProjectToEdit && this.editProjectForm.valid) {
+      const updatedProject: ProjectDto = {
+        ...this.selectedProjectToEdit,
+        name: this.editProjectForm.value.projectName,
+        description: this.editProjectForm.value.description,
+        active: this.selectedProjectToEdit.active
+      };
+
+      console.log('Submitting updated project:', updatedProject);
+
+      this.projectService.patchProjectToTeam(this.teamId, updatedProject).subscribe({
+        next: (updated: ProjectDto) => {
+          console.log('Project updated from backend:', updated);
+
+          const index = this.projects.findIndex(p => p.id === updated.id);
+          if (index > -1) {
+            this.projects[index] = updated;
+          }
+
+          this.loadProjects(this.companyId, this.teamId);
+          this.closeEditProjectModal();
+        },
+        error: (err) => {
+          console.error('Failed to update project: ', err);
+        }
+      });
     }
   }
 
   // Edit Project Modal Methods
-  openEditProjectModal() {
+  openEditProjectModal(project: ProjectDto) {
+    this.selectedProjectToEdit = { ...project };
+    this.editProjectForm.setValue({
+      projectName: project.name,
+      description: project.description
+    });
+    
     this.showEditProjectModal = true;
   }
 

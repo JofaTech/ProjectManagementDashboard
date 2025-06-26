@@ -25,6 +25,7 @@
     </app-modal>
 
     <div class="announcements">
-        <app-announcement-card></app-announcement-card>
+        <app-announcement-card *ngFor="let announcement of announcements"
+            [announcement]="announcement"></app-announcement-card>
     </div>
 </div>

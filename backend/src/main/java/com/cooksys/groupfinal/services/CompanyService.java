@@ -7,6 +7,7 @@ import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
 import com.cooksys.groupfinal.dtos.TeamDto;
 import com.cooksys.groupfinal.dtos.UserRequestDto;
+import com.cooksys.groupfinal.dtos.CompanyDto;
 
 public interface CompanyService {
 
@@ -14,7 +15,7 @@ public interface CompanyService {
 
 	Set<AnnouncementDto> getAllAnnouncements(Long id);
 
-	Set<TeamDto> getAllTeams(Long id);
+	// Set<TeamDto> getAllTeams(Long id);
 
 	Set<ProjectDto> getAllProjects(Long companyId, Long teamId);
 
@@ -29,5 +30,9 @@ public interface CompanyService {
 	void removeTeam(Long companyId, Long teamId);
 
 	void deleteAnnouncement(Long companyId, Long announcementId);
+
+	Set<CompanyDto> getAllCompanies();
+
+	CompanyDto getCompanyById(Long id);
 
 }

@@ -33,15 +33,14 @@ import com.cooksys.groupfinal.services.CompanyService;
 
 import lombok.RequiredArgsConstructor;
 
-
 @RestController
-@RequestMapping("/team")
+@RequestMapping("/team-service")
 @RequiredArgsConstructor
 public class TeamController {
 
 	private final TeamService teamService;
 
-	//patch mappings
+	// patch mappings
 	@PatchMapping("/{teamId}/project")
 	public TeamDto patchTeamProject(@PathVariable Long teamId, @RequestBody ProjectDto projectDto) {
 		return teamService.patchTeamProject(teamId, projectDto);

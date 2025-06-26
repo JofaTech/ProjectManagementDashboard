@@ -64,13 +64,22 @@ public class TeamServiceImpl implements TeamService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project with ID " + projectId + " does not exist."));
 
+        project.setName(projectDto.getName());
+        project.setDescription(projectDto.getDescription());
+        project.setActive(projectDto.isActive());
 
-        if (team.getProjects() == null) {
-            team.setProjects(new HashSet<>());
+        if (!team.getProjects().contains(project)) {
+            team.getProjects().add(project);
         }
+
+        // if (team.getProjects() == null) {
+        //     team.setProjects(new HashSet<>());
+        // }
         
-        team.getProjects().add(project);
-        teamRepository.save(team);
+        // team.getProjects().add(project);
+        // teamRepository.save(team);
+
+        projectRepository.save(project);
         
         return teamMapper.entityToDto(team);
     }
