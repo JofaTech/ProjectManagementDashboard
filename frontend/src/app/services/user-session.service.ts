@@ -24,7 +24,7 @@ export class UserSessionService {
   }
 
   isAdmin():boolean{
-    if (this.user && this.user.admin) {
+    if (this.user && this.user.isAdmin) {
       return true;
     } else {
       return false;
