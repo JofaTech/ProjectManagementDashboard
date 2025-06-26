@@ -1,31 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedDataService } from '../shared-data.service';
+import { BasicUserDto } from '../services/basic-user.dto';
+import { AnnouncementDto } from '../services/announcement.dto';
 
-// Profile interface
-interface Profile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-}
+// // Profile interface
+// interface Profile {
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phone: string;
+// }
 
-// Basicuser interface
-interface BasicUser {
-  id: number;
-  profile: Profile;
-  isAdmin: boolean;
-  active: boolean;
-  status: string;
-}
+// // Basicuser interface
+// interface BasicUser {
+//   id: number;
+//   profile: Profile;
+//   isAdmin: boolean;
+//   active: boolean;
+//   status: string;
+// }
 
 // Announcement interface
-interface Announcement {
-  id: number;
-  date: number; // timestamp
-  title: string;
-  message: string;
-  author: BasicUser;
-}
+// interface Announcement {
+//   id: number;
+//   date: number; // timestamp
+//   title: string;
+//   message: string;
+//   author: BasicUserDto;
+// }
 
 @Component({
   selector: 'app-announcements-page',
@@ -34,7 +36,7 @@ interface Announcement {
 })
 export class AnnouncementsPageComponent implements OnInit {
   // Announcements to display
-  announcements: Announcement[] = [];
+  announcements: AnnouncementDto[] = [];
 
   // Modal info
   showCreateAnnouncementModal = false;
@@ -70,7 +72,7 @@ export class AnnouncementsPageComponent implements OnInit {
 
     fetch(`http://localhost:4200/company/${companyId}/announcements`)
       .then(response => response.json())
-      .then((data: Announcement[]) => {
+      .then((data: AnnouncementDto[]) => {
         console.log("announcements: ", data)
         this.announcements = data;
       })
