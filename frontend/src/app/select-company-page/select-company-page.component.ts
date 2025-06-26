@@ -8,8 +8,14 @@ import { Router } from '@angular/router';
 })
 export class SelectCompanyPageComponent {
   selectedCompany: string = '';
+  companies: any[] = [];
 
   constructor(private router: Router) {}
+
+  //fetch compaines on page load
+  ngOnInit(): void {
+    this.fetchCompanies();
+  }
 
   submitCompany(): void {
     if (this.selectedCompany && this.selectedCompany !== '') {
@@ -18,6 +24,18 @@ export class SelectCompanyPageComponent {
     } else {
       alert('Please select a company.');
     }
+  }
+
+  fetchCompanies(): void {
+  fetch('http://localhost:4200/company')
+    .then(response => response.json())
+    .then(data => {
+      this.companies = data; // <--- this line was missing
+      console.log('Companies fetched: ', this.companies);
+    })
+    .catch(error => {
+      console.error('Error fetching companies:', error);
+    });
   }
 
 }
