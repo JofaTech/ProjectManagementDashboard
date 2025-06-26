@@ -74,6 +74,7 @@ export class UsersPageComponent implements OnInit {
     if (this.userForm.valid) {
       const userReq: UserRequestDto = {
         credentials: {
+          username: this.userForm.value.email,
           email: this.userForm.value.email,
           password: this.userForm.value.password
         },
