@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.cooksys.groupfinal.dtos.CompanyDto;
 import com.cooksys.groupfinal.dtos.AnnouncementDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
@@ -23,7 +24,9 @@ import com.cooksys.groupfinal.dtos.UserRequestDto;
 import com.cooksys.groupfinal.services.AnnouncementService;
 import com.cooksys.groupfinal.services.CompanyService;
 
+
 import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequestMapping("/company")
@@ -84,5 +87,16 @@ public class CompanyController {
     @GetMapping("/{companyId}/teams/{teamId}/projects")
     public Set<ProjectDto> getAllProjects(@PathVariable Long companyId, @PathVariable Long teamId) {
         return companyService.getAllProjects(companyId, teamId);
+    }
+
+    //new routes because we need to get companies that exist in the db
+    @GetMapping("/{id}")
+    public CompanyDto getCompanyById(@PathVariable Long id) {
+        return companyService.getCompanyById(id);
+    }
+
+    @GetMapping()
+    public Set<CompanyDto> getAllCompanies() {
+        return companyService.getAllCompanies();
     }
 }
