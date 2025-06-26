@@ -21,8 +21,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "*")
+    //@CrossOrigin(origins = "*")
     public BasicUserDto login(@RequestBody CredentialsDto credentialsDto) {
+        System.out.println("LOGIN ATTEMPT: " + credentialsDto.getUsername());
         return userService.login(credentialsDto);
     }
 
