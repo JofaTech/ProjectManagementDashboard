@@ -10,10 +10,10 @@ import { UsersPageComponent } from './users-page/users-page.component';
 const routes: Routes = [
   { path: '', component: LoginPageComponent },
   { path: 'select-company', component: SelectCompanyPageComponent },
-  { path: 'announcements', component: AnnouncementsPageComponent},
-  { path: 'teams', component: TeamsPageComponent},
-  { path: 'projects', component: ProjectsPageComponent},
-  { path: 'users', component: UsersPageComponent}
+  { path: 'announcements', component: AnnouncementsPageComponent },
+  { path: 'teams', component: TeamsPageComponent },
+  { path: 'projects', component: ProjectsPageComponent },
+  { path: 'users', component: UsersPageComponent, runGuardsAndResolvers: 'always' }
 ];
 
 @NgModule({

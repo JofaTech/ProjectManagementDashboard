@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { FullUserDto } from '../services/full-user.dto';
 import { UserRequestDto } from '../services/user-request.dto';
+import { SharedDataService } from '../shared-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users-page',
@@ -12,22 +14,37 @@ import { UserRequestDto } from '../services/user-request.dto';
 export class UsersPageComponent implements OnInit {
 
   users: FullUserDto[] = [];
-  companyId = 6; // TODO: this needs to be changed 
+  companyId: number | null = null;
+
+  private companySub!: Subscription;
 
   showUserOverlay = false;
 
   userForm!: FormGroup;
   dropdownOpen = false;
 
-  constructor(private fb: FormBuilder, private userService: UserService) { }
+  constructor(private fb: FormBuilder, private userService: UserService, private sharedDataService: SharedDataService) { }
 
   ngOnInit() {
-    this.fetchUsers();
+    this.companySub = this.sharedDataService.selectedCompanyId$.subscribe(id => {
+      console.log("received company id:", id)
+      this.companyId = id;
+      if (id !== null) {
+        this.fetchUsers(id);
+      } else {
+        console.error("Invalid Company ID")
+      }
+    });
     this.initForm();
   }
 
-  fetchUsers() {
-    this.userService.getUsersByCompanyId(this.companyId).subscribe({
+
+  ngOnDestroy() {
+    this.companySub?.unsubscribe();
+  }
+
+  fetchUsers(companyId: number) {
+    this.userService.getUsersByCompanyId(companyId).subscribe({
       next: (data) => {
         this.users = data;
       },
@@ -87,18 +104,22 @@ export class UsersPageComponent implements OnInit {
         admin: this.userForm.value.adminRole
       };
 
-      this.userService.addUserToCompany(this.companyId, userReq).subscribe({
-        next: (newUser) => {
-          this.users.push(newUser);
-          this.closeAddUser();
-          this.userForm.reset();
-        },
-        error: (err) => {
-          console.error('Failed to create user: ', err);
-        }
-      });
+      if (this.companyId !== null) {
+        this.userService.addUserToCompany(this.companyId, userReq).subscribe({
+          next: (newUser) => {
+            this.users.push(newUser);
+            this.closeAddUser();
+            this.userForm.reset();
+          },
+          error: (err) => {
+            console.error('Failed to create user: ', err);
+          }
+        });
+      } else {
+        this.userForm.markAllAsTouched();
+      }
     } else {
-      this.userForm.markAllAsTouched();
+      console.error('Invalid company ID')
     }
   }
 
