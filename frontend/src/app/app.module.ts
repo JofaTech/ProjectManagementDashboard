@@ -14,6 +14,7 @@ import { TeamsPageComponent } from './teams-page/teams-page.component';
 import { TeamsCardComponent } from './teams-page/teams-card/teams-card.component';
 import { UsersPageComponent } from './users-page/users-page.component';
 import { ModalComponent } from './modal/modal.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
