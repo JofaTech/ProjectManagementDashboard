@@ -30,6 +30,10 @@ import com.cooksys.groupfinal.repositories.CompanyRepository;
 import com.cooksys.groupfinal.repositories.TeamRepository;
 import com.cooksys.groupfinal.repositories.UserRepository;
 import com.cooksys.groupfinal.services.CompanyService;
+import com.cooksys.groupfinal.dtos.CompanyDto;
+import com.cooksys.groupfinal.mappers.CompanyMapper;
+
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
 	private final AnnouncementMapper announcementMapper;
 	private final TeamMapper teamMapper;
 	private final ProjectMapper projectMapper;
+	private final CompanyMapper companyMapper;
 
 	private Company findCompany(Long id) {
 		Optional<Company> company = companyRepository.findById(id);
@@ -152,9 +157,14 @@ public class CompanyServiceImpl implements CompanyService {
 		Company company = findCompany(id);
 
 		User user = fullUserMapper.requestDtoToEntity(uRequestDto);
-		user.getCompanies().add(company);
 
-		return fullUserMapper.entityToFullUserDto(userRepository.saveAndFlush(user));
+		user.getCompanies().add(company); // user → company
+		company.getEmployees().add(user); // company → user (bidirectional)
+		user.setActive(true);
+		
+		user = userRepository.saveAndFlush(user);
+
+		return fullUserMapper.entityToFullUserDto(user);
 
 	}
 
@@ -199,5 +209,18 @@ public class CompanyServiceImpl implements CompanyService {
 
 		announcementRepository.delete(announcement);
 	}
+
+	@Override
+	public Set<CompanyDto> getAllCompanies() {
+		return companyMapper.entitiesToDtos(new HashSet<>(companyRepository.findAll()));
+	}
+
+	@Override
+    public CompanyDto getCompanyById(Long id) {
+        return companyMapper.entityToDto(
+            companyRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Company with ID " + id + " not found."))
+        );
+    }
 
 }
