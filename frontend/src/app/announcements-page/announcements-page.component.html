@@ -13,10 +13,11 @@
         <h3>Create New Announcement</h3>
         <form (ngSubmit)="submitNewAnnouncement()">
             <label for="title">Title</label>
-            <input id="title" type="text" placeholder="Enter title" />
+            <input id="title" type="text" placeholder="Enter title" [(ngModel)]="title" name="title" required />
 
             <label for="message">Message</label>
-            <textarea id="message" rows="4" placeholder="Enter message"></textarea>
+            <textarea id="message" rows="4" placeholder="Enter message" [(ngModel)]="message" name="message"
+                required></textarea>
             <div class="submit-button-row">
                 <button type="submit" class="blue-button">Submit</button>
             </div>

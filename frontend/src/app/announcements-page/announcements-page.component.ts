@@ -3,40 +3,19 @@ import { SharedDataService } from '../shared-data.service';
 import { BasicUserDto } from '../services/basic-user.dto';
 import { AnnouncementDto } from '../services/announcement.dto';
 
-// // Profile interface
-// interface Profile {
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   phone: string;
-// }
-
-// // Basicuser interface
-// interface BasicUser {
-//   id: number;
-//   profile: Profile;
-//   isAdmin: boolean;
-//   active: boolean;
-//   status: string;
-// }
-
-// Announcement interface
-// interface Announcement {
-//   id: number;
-//   date: number; // timestamp
-//   title: string;
-//   message: string;
-//   author: BasicUserDto;
-// }
-
 @Component({
   selector: 'app-announcements-page',
   templateUrl: './announcements-page.component.html',
   styleUrls: ['./announcements-page.component.css']
 })
+
 export class AnnouncementsPageComponent implements OnInit {
   // Announcements to display
   announcements: AnnouncementDto[] = [];
+
+  // Form fields
+  title: string = '';
+  message: string = '';
 
   // Modal info
   showCreateAnnouncementModal = false;
@@ -56,10 +35,63 @@ export class AnnouncementsPageComponent implements OnInit {
   }
 
   submitNewAnnouncement() {
-    // TODO: Implement POST logic to submit new announcement
-    console.log('submitNewAnnouncement() called. Implementation pending')
+    // Get company id and make sure it isn't null
+    const companyId = this.sharedDataService.getSelectedCompanyId();
+
+    if (!companyId) {
+      console.error('Cannot post announcement: no company selected');
+      return;
+    }
+
+    // Hard-code author for now
+    const author: BasicUserDto = {
+      id: 18,
+      profile: {
+        firstName: 'Greg',
+        lastName: 'Hirsch',
+        email: 'ghirsch@email.com',
+        phone: '(000) 000-0000'
+      },
+      isAdmin: false,
+      active: true,
+      status: 'PENDING'
+    }
+
+    // Create announcement 
+    const newAnnouncement: Omit<AnnouncementDto, 'id'> = {
+      date: Date.now(),
+      title: this.title.trim(),
+      message: this.message.trim(),
+      author
+    };
+
+    // POST
+    fetch(`http://localhost:4200/company/${companyId}/announcements`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newAnnouncement)
+    })
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to post announcement');
+        return response.json();
+      })
+      .then((createdAnnouncement: AnnouncementDto) => {
+        // Add new announcement to top of list
+        this.announcements.unshift(createdAnnouncement);
+
+        // Reset form fields and close modal
+        this.title = '';
+        this.message = '';
+        this.closeCreateAnnouncement();
+      })
+      .catch(err => {
+        console.error('Error posting announcement:', err);
+      });
   }
 
+  // Get announcements for corresponding company
   fetchAnnouncements() {
     // Get company id for announcements to display:
     const companyId = this.sharedDataService.getSelectedCompanyId();
