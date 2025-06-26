@@ -15,10 +15,9 @@ body {
     padding-bottom: 20px;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #1BA098;
+    border-bottom: 2px solid #DEB992;
     color: #1BA098;
 }
-
 
 /* This is the text color and font family shown in the wireframe for almost all headers options and titles */
 .header-text {
@@ -60,8 +59,8 @@ body {
 
 .navbar-nav .nav-link {
     color: #1BA098;
-    font-size: 30px;
-    margin-left: 15px;
+    font-size: 36px;
+    margin-left: 24px;
 }
 
 .blue-button {
