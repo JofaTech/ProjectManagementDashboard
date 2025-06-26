@@ -35,6 +35,13 @@ export class UsersPageComponent implements OnInit {
         console.error("Invalid Company ID")
       }
     });
+    // this.companyId = this.sharedDataService.getSelectedCompanyId();
+    // if (this.companyId !== null) {
+    //   this.fetchUsers(this.companyId);
+    // } else {
+    //   console.error('Invalid/Null Company ID', this.companyId);
+    // }
+
     this.initForm();
   }
 
