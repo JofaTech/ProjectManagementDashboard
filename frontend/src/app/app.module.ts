@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,7 +14,7 @@ import { TeamsPageComponent } from './teams-page/teams-page.component';
 import { TeamsCardComponent } from './teams-page/teams-card/teams-card.component';
 import { UsersPageComponent } from './users-page/users-page.component';
 import { ModalComponent } from './modal/modal.component';
-
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import { ModalComponent } from './modal/modal.component';
     ModalComponent
   ],
   imports: [
-    HttpClientModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,

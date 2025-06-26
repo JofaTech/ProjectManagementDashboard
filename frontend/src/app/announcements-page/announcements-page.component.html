@@ -4,7 +4,7 @@
     <div class="page-title">
         <h2 class="header-text">Announcements</h2>
         <div class="button-row">
-            <button class="new-button" (click)="fetchAnnouncements()">New</button>
+            <button class="new-button" (click)="openCreateAnnouncement()">New</button>
         </div>
     </div>
 
@@ -25,6 +25,7 @@
     </app-modal>
 
     <div class="announcements">
-        <app-announcement-card></app-announcement-card>
+        <app-announcement-card *ngFor="let announcement of announcements"
+            [announcement]="announcement"></app-announcement-card>
     </div>
 </div>
