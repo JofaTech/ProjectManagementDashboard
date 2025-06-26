@@ -3,6 +3,7 @@ package com.cooksys.groupfinal.controllers;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,10 +60,10 @@ public class CompanyController {
         companyService.deleteAnnouncement(companyId, announcementId);
     }
 
-    @GetMapping("/{id}/teams")
-    public Set<TeamDto> getAllTeams(@PathVariable Long id) {
-        return companyService.getAllTeams(id);
-    }
+    // @GetMapping("/{id}/teams")
+    // public Set<TeamDto> getAllTeams(@PathVariable Long id) {
+    //     return companyService.getAllTeams(id);
+    // }
 
     @GetMapping("/{companyId}/teams")
     public Set<TeamDto> getCompanyTeams(@PathVariable Long companyId) {

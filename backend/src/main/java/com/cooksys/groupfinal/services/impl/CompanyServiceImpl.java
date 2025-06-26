@@ -97,11 +97,11 @@ public class CompanyServiceImpl implements CompanyService {
 		return announcementMapper.entitiesToDtos(sortedSet);
 	}
 
-	@Override
-	public Set<TeamDto> getAllTeams(Long id) {
-		Company company = findCompany(id);
-		return teamMapper.entitiesToDtos(company.getTeams());
-	}
+	// @Override
+	// public Set<TeamDto> getAllTeams(Long id) {
+	// 	Company company = findCompany(id);
+	// 	return teamMapper.entitiesToDtos(company.getTeams());
+	// }
 
 	@Override
 	public Set<ProjectDto> getAllProjects(Long companyId, Long teamId) {
