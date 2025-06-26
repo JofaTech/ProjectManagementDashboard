@@ -121,6 +121,7 @@ public class CompanyServiceImpl implements CompanyService {
 		filteredProjects.removeIf(project -> !project.isActive());
 		return projectMapper.entitiesToDtos(filteredProjects);
 	}
+
 	@Override
 	public Set<TeamDto> getCompanyTeams(Long companyId) {
 		Company company = findCompany(companyId);
@@ -128,23 +129,28 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-    public TeamDto postTeamToCompany(Long companyId, TeamDto teamDto) {
-        Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new NotFoundException("Company with ID " + companyId + " does not exist."));
-        Team team = teamMapper.dtoToEntity(teamDto);
-        team.setCompany(company);
-        team = teamRepository.save(team);
-        return teamMapper.entityToDto(team);
-    }
+	public TeamDto postTeamToCompany(Long companyId, TeamDto teamDto) {
+		Company company = companyRepository.findById(companyId)
+				.orElseThrow(() -> new NotFoundException("Company with ID " + companyId + " does not exist."));
+		Team team = teamMapper.dtoToEntity(teamDto);
+		team.setCompany(company);
+		team = teamRepository.save(team);
+		return teamMapper.entityToDto(team);
+	}
 
 	@Override
 	public FullUserDto addUser(Long id, UserRequestDto uRequestDto) {
 		Company company = findCompany(id);
 
 		User user = fullUserMapper.requestDtoToEntity(uRequestDto);
-		user.getCompanies().add(company);
 
-		return fullUserMapper.entityToFullUserDto(userRepository.saveAndFlush(user));
+		user.getCompanies().add(company); // user → company
+		company.getEmployees().add(user); // company → user (bidirectional)
+		user.setActive(true);
+		
+		user = userRepository.saveAndFlush(user);
+
+		return fullUserMapper.entityToFullUserDto(user);
 
 	}
 
