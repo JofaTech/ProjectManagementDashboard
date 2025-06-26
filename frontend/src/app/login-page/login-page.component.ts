@@ -34,7 +34,7 @@ export class LoginPageComponent {
     this.http.post<BasicUserDto>(`${this.API_URL}/users/login`, credentials).subscribe({
       next: (user) =>{
         this.userSession.setUser(user)
-        if (user.admin){
+        if (user.isAdmin){
           this.router.navigate(['/admin-dashboard']);
         }else{
           this.router.navigate(['/select-company']);
