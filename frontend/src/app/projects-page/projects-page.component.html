@@ -15,15 +15,15 @@
             <div *ngFor="let project of projects" class="project-box">
                 <div class="project-info">
                     <div class="title-row">
-                        <h3 class="project-title"> {{project.title}} </h3>
+                        <h3 class="project-title"> {{project.name}} </h3>
                         <span class="project-status" [ngClass]="{
-                            'active': project.status.toLowerCase() === 'active',
-                            'inactive': project.status.toLowerCase() === 'inactive'
-                        }"> {{project.status}} </span>
+                            'active': project.active,
+                            'inactive': !project.active
+                        }"> {{project.active ? 'Active' : 'Inactive' }} </span>
                     </div>
                     <p class="project-description"> {{project.description}} </p>
                 </div>
-                <button class="edit-button yellow-button"> Edit </button>
+                <button class="edit-button yellow-button" (click)="openEditProjectModal(project)"> Edit </button>
             </div>
         </div>
     </div>
@@ -49,5 +49,16 @@
     <!-- Edit Project Modal -->
     <app-modal *ngIf="showEditProjectModal" (close)="closeEditProjectModal()">
         <h3>Edit Project</h3>
+        <form [formGroup]="editProjectForm" (ngSubmit)="submitEditProject()">
+            <label for="editProjectName">Project Name</label>
+            <input id="editProjectName" type="text" formControlName="projectName" placeholder="Enter project name" />
+
+            <label for="editDescription">Description</label>
+            <input id="editDescription" type="text" formControlName="description" placeholder="Enter description" />
+
+            <button type="submit" [disabled]="editProjectForm.invalid" class="blue-button">
+                Save Changes
+            </button>
+        </form>
     </app-modal>
 </div>

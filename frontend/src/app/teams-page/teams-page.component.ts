@@ -40,7 +40,13 @@ export class TeamsPageComponent implements OnInit {
 
   // Routing to projects's page
   goToProjects(teamId: number, teamName: string) {
-    this.router.navigate(['/projects'], { queryParams: { id: teamId, name: teamName } });
+    this.router.navigate(['/projects'], { 
+      queryParams: {
+        id: teamId,
+        name: teamName,
+        companyId: this.companyId
+      }
+    });
   }
 
   // Methods for selecting + removing members
