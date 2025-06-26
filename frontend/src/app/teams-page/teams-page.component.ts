@@ -1,58 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TeamService, TeamDto } from '../services/team.service';
+import { UserService } from '../services/user.service';
+import { BasicUserDto } from '../services/basic-user.dto';
 
 @Component({
   selector: 'app-teams-page',
   templateUrl: './teams-page.component.html',
   styleUrls: ['./teams-page.component.css']
 })
-export class TeamsPageComponent {
-  // Dummy data to represent teams:
-  teams = [
-    {
-      id: 1,
-      name: 'Team 1',
-      projectsCount: 4,
-      members: ['Chris R.', 'Helena M.', 'Kenny W.', 'Will M.']
-    },
-    {
-      id: 2,
-      name: 'Team2',
-      projectsCount: 4,
-      members: ['Chris R.', 'Helena M.']
-    },
-    {
-      id: 3,
-      name: 'Team3',
-      projectsCount: 4,
-      members: ['Will M.', 'Helena M.', 'Kenny W.']
-    },
-    {
-      id: 4,
-      name: 'Team4',
-      projectsCount: 2,
-      members: ['Kenny W.', 'Helena M.']
-    },
-    {
-      id: 5,
-      name: 'Team5',
-      projectsCount: 4,
-      members: ['Will M.', 'Kenny W.']
-    }
-  ]
+export class TeamsPageComponent implements OnInit {
 
-  // Form fields
-  teamName = '';
-  description = '';
+  teams: TeamDto[] = []
+  teamName: string = '';
+  description: string = '';
+  selectedMembers: BasicUserDto[] = [];
+  availableMembers: BasicUserDto[] = [];
+  showNewTeamModal: boolean = false;
+  companyId = 6; // TODO: need to replace later with real data
 
-  // Dummy data for available members
-  availableMembers = ['Chris P.', 'Wil M.', 'Helena M.', 'Kenny W.']
+  constructor(
+    private router: Router,
+    private teamService: TeamService,
+    private userService: UserService
+  ) { }
 
-  selectedMembers: string[] = [];
+  ngOnInit(): void {
+    console.log('ngOnInit is running...');
+    this.teamService.getTeamsByCompanyId(this.companyId).subscribe({
+      next: (data) => this.teams = data,
+      error: (err) => console.error('Error fetching teams: ', err)
+    });
 
-  showNewTeamModal = false;
-
-  constructor(private router: Router) { }
+    this.userService.getUsersByCompanyId(this.companyId).subscribe({
+      next: (users) => this.availableMembers = users,
+      error: (err) => console.error('Error fetching users: ', err)
+    })
+  }
 
   // Routing to projects's page
   goToProjects(teamId: number, teamName: string) {
@@ -62,16 +46,19 @@ export class TeamsPageComponent {
   // Methods for selecting + removing members
   onMemberSelected(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    const member = selectElement.value;
+    const userId = +selectElement.value;
+    const user = this.availableMembers.find(u => u.id === userId);
 
     // Make sure member exists and is not a part of selected members array already
-    if (member && !this.selectedMembers.includes(member)) {
-      this.selectedMembers.push(member);
+    if (user && !this.selectedMembers.find(m => m.id === user.id)) {
+      this.selectedMembers.push(user);
     }
+
+    selectElement.value = '';
   }
 
-  removeMember(member: string) {
-    this.selectedMembers = this.selectedMembers.filter(m => m !== member);
+  removeMember(member: BasicUserDto) {
+    this.selectedMembers = this.selectedMembers.filter(m => m.id !== member.id);
   }
 
   // Open and close modal methods
@@ -85,19 +72,29 @@ export class TeamsPageComponent {
 
   // Method for submitting new team to database
   submitNewTeam() {
-    // TODO: Implement POST logic to submit new team
-    console.log('submitNewTeam() called. Implementation pending. New Team:', {
-      teamName: this.teamName,
+    const newTeam: TeamDto = {
+      name: this.teamName,
       description: this.description,
-      members: this.selectedMembers
-    })
+      teammates: this.selectedMembers
+    };
 
-    // Close team modal
-    this.closeNewTeamModal()
+    this.teamService.postTeamToCompany(this.companyId, newTeam).subscribe({
+      next: (team) => {
+        console.log('Team created: ', team);
+        this.teams.push(team);
+        this.closeNewTeamModal();
+        this.clearForm();
+      },
+      error: (err) => {
+        console.error('Failed to create team: ', err);
+      }
+    });
+  }
 
-    // Clear form data for next time
+  clearForm() {
     this.teamName = '';
     this.description = '';
     this.selectedMembers = [];
   }
+
 }
