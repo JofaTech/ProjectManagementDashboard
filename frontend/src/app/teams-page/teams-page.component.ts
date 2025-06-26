@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TeamService, TeamDto } from '../services/team.service';
 import { UserService } from '../services/user.service';
-import { BasicUserDto } from '../services/basic-user.dto';
+//import { BasicUserDto } from '../services/basic-user.dto';
+import { FullUserDto } from '../services/full-user.dto';
 
 @Component({
   selector: 'app-teams-page',
@@ -14,8 +15,8 @@ export class TeamsPageComponent implements OnInit {
   teams: TeamDto[] = []
   teamName: string = '';
   description: string = '';
-  selectedMembers: BasicUserDto[] = [];
-  availableMembers: BasicUserDto[] = [];
+  selectedMembers: FullUserDto[] = [];
+  availableMembers: FullUserDto[] = [];
   showNewTeamModal: boolean = false;
   companyId = 6; // TODO: need to replace later with real data
 
@@ -40,7 +41,7 @@ export class TeamsPageComponent implements OnInit {
 
   // Routing to projects's page
   goToProjects(teamId: number, teamName: string) {
-    this.router.navigate(['/projects'], { 
+    this.router.navigate(['/projects'], {
       queryParams: {
         id: teamId,
         name: teamName,
@@ -63,7 +64,7 @@ export class TeamsPageComponent implements OnInit {
     selectElement.value = '';
   }
 
-  removeMember(member: BasicUserDto) {
+  removeMember(member: FullUserDto) {
     this.selectedMembers = this.selectedMembers.filter(m => m.id !== member.id);
   }
 
@@ -81,7 +82,13 @@ export class TeamsPageComponent implements OnInit {
     const newTeam: TeamDto = {
       name: this.teamName,
       description: this.description,
-      teammates: this.selectedMembers
+      teammates: this.selectedMembers.map(user => ({
+        id: user.id ?? 0, 
+        profile: user.profile,
+        admin: user.admin,
+        active: user.active,
+        status: user.status
+      }))
     };
 
     this.teamService.postTeamToCompany(this.companyId, newTeam).subscribe({

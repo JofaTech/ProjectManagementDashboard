@@ -11,7 +11,7 @@ import com.cooksys.groupfinal.dtos.CompanyDto;
 
 public interface CompanyService {
 
-	Set<FullUserDto> getAllUsers(Long id);
+	Set<FullUserDto> getAllUsers(Long id, boolean onlyActive);
 
 	Set<AnnouncementDto> getAllAnnouncements(Long id);
 

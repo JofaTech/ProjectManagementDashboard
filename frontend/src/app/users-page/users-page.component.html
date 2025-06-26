@@ -24,9 +24,9 @@
             <!-- Table Body -->
             <tbody>
                 <tr *ngFor="let user of users">
-                    <td> {{user.name}} </td>
-                    <td> {{user.email}} </td>
-                    <td class="active-status" [ngClass]="{'status-yes': user.admin, 'status-no': !user.admin}">
+                    <td> {{ user.profile.firstName }} {{ user.profile.lastName }} </td>
+                    <td> {{ user.profile.email }} </td>
+                    <td class="active-status" [ngClass]="{'status-yes': user.active, 'status-no': !user.active}">
                         {{user.active ? 'YES' : 'NO'}}
                     </td>
                     <td class="admin-status" [ngClass]="{'status-yes': user.admin, 'status-no' : !user.admin}">
@@ -74,15 +74,15 @@
                 <label>Make user an admin role?</label>
 
                 <!-- Dropdown -->
-                <div class="dropdown" (click)="toggleDropdown()">
+                <div class="dropdown" (click)="toggleDropdown()" tabindex="0" (blur)="dropdownOpen = false">
                     <div class="dropdown-selected">
-                        {{userForm.get('adminRole')?.value === null ? 'Pick an option' :
-                        userForm.get('adminRole')?.value}}
+                        {{ userForm.get('adminRole')?.value === null ? 'Pick an option' :
+                        (userForm.get('adminRole')?.value ? 'true' : 'false') }}
                     </div>
 
                     <div class="dropdown-list" *ngIf="dropdownOpen">
-                        <div class="dropdown-item" (click)="selectRole(true)">true</div>
-                        <div class="dropdown-item" (click)="selectRole(false)">false</div>
+                        <div class="dropdown-item" (mousedown)="selectRole(true)">true</div>
+                        <div class="dropdown-item" (mousedown)="selectRole(false)">false</div>
                     </div>
                 </div>
             </div>

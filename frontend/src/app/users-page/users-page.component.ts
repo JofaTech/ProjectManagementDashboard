@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../services/user.service';
+import { FullUserDto } from '../services/full-user.dto';
+import { UserRequestDto } from '../services/user-request.dto';
 
 @Component({
   selector: 'app-users-page',
@@ -8,22 +11,33 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class UsersPageComponent implements OnInit {
 
-  // Dummy data for users:
-  users = [
-    { name: 'Chris Purnell', email: 'yocizzle@gmail.com', active: true, admin: true, status: 'JOINED' },
-    { name: 'Kenny Worth', email: 'kmoney@gmail.com', active: true, admin: true, status: 'JOINED' },
-    { name: 'Will Marttala', email: 'wamizzle@gmail.com', active: false, admin: false, status: 'PENDING' },
-    { name: 'Helena Makendengue', email: 'hmasizzle@gmail.com', active: false, admin: false, status: 'PENDING' },
-  ];
+  users: FullUserDto[] = [];
+  companyId = 6; // TODO: this needs to be changed 
 
   showUserOverlay = false;
 
   userForm!: FormGroup;
   dropdownOpen = false;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private userService: UserService) { }
 
   ngOnInit() {
+    this.fetchUsers();
+    this.initForm();
+  }
+
+  fetchUsers() {
+    this.userService.getUsersByCompanyId(this.companyId).subscribe({
+      next: (data) => {
+        this.users = data;
+      },
+      error: (err) => {
+        console.error('Error fetching users: ', err);
+      }
+    });
+  }
+
+  initForm() {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -32,7 +46,9 @@ export class UsersPageComponent implements OnInit {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       adminRole: [null, Validators.required]
-    }, { validators: this.passwordMatchValidator });
+    }, {
+      validators: this.passwordMatchValidator
+    });
   }
 
   passwordMatchValidator = (form: FormGroup) => {
@@ -51,10 +67,35 @@ export class UsersPageComponent implements OnInit {
   }
 
   submitNewUser() {
+    console.log('Submit called');
+    console.log('Form Valid:', this.userForm.valid);
+    console.log('Form Value:', this.userForm.value);
+
     if (this.userForm.valid) {
-      console.log('User data to submit:', this.userForm.value);
-      // TODO: connect to backend here later
-      this.closeAddUser();
+      const userReq: UserRequestDto = {
+        credentials: {
+          email: this.userForm.value.email,
+          password: this.userForm.value.password
+        },
+        profile: {
+          firstName: this.userForm.value.firstName,
+          lastName: this.userForm.value.lastName,
+          email: this.userForm.value.email,
+          phone: this.userForm.value.phone
+        },
+        admin: this.userForm.value.adminRole
+      };
+
+      this.userService.addUserToCompany(this.companyId, userReq).subscribe({
+        next: (newUser) => {
+          this.users.push(newUser);
+          this.closeAddUser();
+          this.userForm.reset();
+        },
+        error: (err) => {
+          console.error('Failed to create user: ', err);
+        }
+      });
     } else {
       this.userForm.markAllAsTouched();
     }

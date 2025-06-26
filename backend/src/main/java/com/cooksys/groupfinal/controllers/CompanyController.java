@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,8 +37,8 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping("/{id}/users")
-    public Set<FullUserDto> getAllUsers(@PathVariable Long id) {
-        return companyService.getAllUsers(id);
+    public Set<FullUserDto> getAllUsers(@PathVariable Long id, @RequestParam(defaultValue = "false") boolean onlyActive) {
+        return companyService.getAllUsers(id, onlyActive);
     }
 
     @PostMapping("/{id}/users")

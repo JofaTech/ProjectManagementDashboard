@@ -33,8 +33,6 @@ import com.cooksys.groupfinal.services.CompanyService;
 import com.cooksys.groupfinal.dtos.CompanyDto;
 import com.cooksys.groupfinal.mappers.CompanyMapper;
 
-
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -85,12 +83,18 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public Set<FullUserDto> getAllUsers(Long id) {
+	public Set<FullUserDto> getAllUsers(Long id, boolean onlyActive) {
+		// Company company = findCompany(id);
+		// Set<User> filteredUsers = new HashSet<>();
+		// company.getEmployees().forEach(filteredUsers::add);
+		// filteredUsers.removeIf(user -> !user.isActive());
+		// return fullUserMapper.entitiesToFullUserDtos(filteredUsers);
 		Company company = findCompany(id);
-		Set<User> filteredUsers = new HashSet<>();
-		company.getEmployees().forEach(filteredUsers::add);
-		filteredUsers.removeIf(user -> !user.isActive());
-		return fullUserMapper.entitiesToFullUserDtos(filteredUsers);
+		Set<User> users = new HashSet<>(company.getEmployees());
+		if (onlyActive) {
+			users.removeIf(user -> !user.isActive());
+		}
+		return fullUserMapper.entitiesToFullUserDtos(users);
 	}
 
 	@Override
@@ -118,7 +122,7 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 
 		team.getProjects().size();
-		
+
 		Set<Project> filteredProjects = new HashSet<>();
 
 		System.out.println("---- DEBUG LOG ----");
@@ -135,6 +139,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 		return projectMapper.entitiesToDtos(filteredProjects);
 	}
+
 	@Override
 	public Set<TeamDto> getCompanyTeams(Long companyId) {
 		Company company = findCompany(companyId);
@@ -142,14 +147,14 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-    public TeamDto postTeamToCompany(Long companyId, TeamDto teamDto) {
-        Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new NotFoundException("Company with ID " + companyId + " does not exist."));
-        Team team = teamMapper.dtoToEntity(teamDto);
-        team.setCompany(company);
-        team = teamRepository.save(team);
-        return teamMapper.entityToDto(team);
-    }
+	public TeamDto postTeamToCompany(Long companyId, TeamDto teamDto) {
+		Company company = companyRepository.findById(companyId)
+				.orElseThrow(() -> new NotFoundException("Company with ID " + companyId + " does not exist."));
+		Team team = teamMapper.dtoToEntity(teamDto);
+		team.setCompany(company);
+		team = teamRepository.save(team);
+		return teamMapper.entityToDto(team);
+	}
 
 	@Override
 	public FullUserDto addUser(Long id, UserRequestDto uRequestDto) {
@@ -210,11 +215,10 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-    public CompanyDto getCompanyById(Long id) {
-        return companyMapper.entityToDto(
-            companyRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Company with ID " + id + " not found."))
-        );
-    }
+	public CompanyDto getCompanyById(Long id) {
+		return companyMapper.entityToDto(
+				companyRepository.findById(id)
+						.orElseThrow(() -> new NotFoundException("Company with ID " + id + " not found.")));
+	}
 
 }
