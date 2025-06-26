@@ -8,3 +8,11 @@ span {
     font-size: 20px;
     margin-left: 20px;
 }
+
+img{
+    transition: rotate 0.3s ease;
+}
+
+img:hover {
+    rotate: 90deg;
+}
