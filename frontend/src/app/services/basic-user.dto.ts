@@ -3,7 +3,7 @@ import { ProfileDto } from "./profile.dto";
 export interface BasicUserDto {
     id: number;
     profile: ProfileDto;
-    admin: boolean;
+    isAdmin: boolean;
     active: boolean;
     status: string;
 }
