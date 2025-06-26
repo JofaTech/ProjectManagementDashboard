@@ -83,9 +83,9 @@ export class TeamsPageComponent implements OnInit {
       name: this.teamName,
       description: this.description,
       teammates: this.selectedMembers.map(user => ({
-        id: user.id ?? 0, 
+        id: user.id ?? 0,
         profile: user.profile,
-        admin: user.admin,
+        isAdmin: user.admin,
         active: user.active,
         status: user.status
       }))
