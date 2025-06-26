@@ -3,6 +3,7 @@ package com.cooksys.groupfinal.controllers;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,15 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.cooksys.groupfinal.dtos.AnnouncementDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
 import com.cooksys.groupfinal.dtos.TeamDto;
 import com.cooksys.groupfinal.dtos.UserRequestDto;
-import com.cooksys.groupfinal.services.AnnouncementService;
 import com.cooksys.groupfinal.services.CompanyService;
 
 import lombok.RequiredArgsConstructor;
@@ -68,12 +66,12 @@ public class CompanyController {
     public Set<TeamDto> getCompanyTeams(@PathVariable Long companyId) {
         return companyService.getCompanyTeams(companyId);
     }
-    //post mappings
+
     @PostMapping("/{companyId}/teams")
     public TeamDto postTeamToCompany(@PathVariable Long companyId, @RequestBody TeamDto teamDto) {
         return companyService.postTeamToCompany(companyId, teamDto);
     }
-    
+
     @DeleteMapping("/{companyId}/teams/{teamId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeTeam(@PathVariable Long companyId, @PathVariable Long teamId) {

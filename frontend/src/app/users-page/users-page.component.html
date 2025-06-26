@@ -24,10 +24,10 @@
             <!-- Table Body -->
             <tbody>
                 <tr *ngFor="let user of users">
-                    <td> {{user.name}} </td>
-                    <td> {{user.email}} </td>
+                    <td> {{ user.profile.firstName }} {{ user.profile.lastName }} </td>
+                    <td> {{ user.profile.email }} </td>
                     <td class="active-status" [ngClass]="{'status-yes': user.admin, 'status-no': !user.admin}">
-                        {{user.active ? 'YES' : 'NO'}}
+                        {{ user.active ? 'YES' : 'NO' }}
                     </td>
                     <td class="admin-status" [ngClass]="{'status-yes': user.admin, 'status-no' : !user.admin}">
                         {{ user.admin ? 'YES' : 'NO' }}
