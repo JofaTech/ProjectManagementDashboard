@@ -3,7 +3,7 @@
         <h1 class="select-company-header header-text">Select Company</h1>
 
         <select (change)="onCompanyChange($event)" name="company" class="dropdown header-text">
-            <option value="" disabled hidden>Pick an option</option>
+            <option value="" disabled selected>Pick an option</option>
             <option *ngFor="let company of companies" [value]="company.id">
                 {{ company.name }}
             </option>
