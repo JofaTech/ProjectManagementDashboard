@@ -24,7 +24,7 @@
 .login-form-box {
     margin-top: 30px;
     width: 500px;
-    height: 90vh;
+    height: 67vh;
     border: 5px solid #DEB992;
     border-radius: 15px;
     padding: 40px;
@@ -81,8 +81,8 @@
 }
 
 .login-image {
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
     object-fit: cover;
     margin-bottom: 15px;
 }
