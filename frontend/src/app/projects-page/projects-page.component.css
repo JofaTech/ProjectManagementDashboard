@@ -72,9 +72,16 @@
 
 .project-status {
     font-family: 'Mulish', sans-serif;
-    color: #22DD2A;
     font-weight: 300;
     font-size: 1rem;
+}
+
+.active {
+    color: #22DD2A;
+}
+
+.inactive {
+    color: #FF4646;
 }
 
 .project-title {

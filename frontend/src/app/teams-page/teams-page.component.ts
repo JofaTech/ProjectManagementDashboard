@@ -88,7 +88,8 @@ export class TeamsPageComponent implements OnInit {
         isAdmin: user.admin,
         active: user.active,
         status: user.status
-      }))
+      })),
+      projectCount: 0
     };
 
     this.teamService.postTeamToCompany(this.companyId, newTeam).subscribe({

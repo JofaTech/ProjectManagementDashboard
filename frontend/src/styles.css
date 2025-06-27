@@ -33,7 +33,7 @@ body {
 
 /* The following options are for the dropdown menu styling used across the website (they all look the same) */
 .dropdown {
-    padding: 20px 20px;
+    /* padding: 20px 20px; */
     font-size: 24px;
     font-weight: bold;
     font-family: 'Mulish', sans-serif;
@@ -41,7 +41,7 @@ body {
     background-color: white;
     border: none;
     border-radius: 12px;
-    appearance: none;
+    /* appearance: none; */
     text-align: center;
     width: 240px;
 }

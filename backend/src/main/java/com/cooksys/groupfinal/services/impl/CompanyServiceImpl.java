@@ -132,7 +132,7 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 
 		team.getProjects().forEach(filteredProjects::add);
-		filteredProjects.removeIf(project -> !project.isActive());
+		//filteredProjects.removeIf(project -> !project.isActive());
 
 		System.out.println("After filtering, active projects count: " + filteredProjects.size());
 		System.out.println("-------------------");

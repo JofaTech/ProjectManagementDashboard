@@ -31,6 +31,7 @@ export class ProjectsPageComponent implements OnInit {
   projects: ProjectDto[] = [];
   companyId!: number;
   selectedProjectToEdit?: ProjectDto;
+  activeDropdownOpen = false;
 
   constructor(
     private route: ActivatedRoute, 
@@ -54,7 +55,8 @@ export class ProjectsPageComponent implements OnInit {
 
     this.editProjectForm = this.fb.group({
       projectName: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      active: [true, Validators.required]
     })
 
     // Load Projects
@@ -115,7 +117,7 @@ export class ProjectsPageComponent implements OnInit {
         ...this.selectedProjectToEdit,
         name: this.editProjectForm.value.projectName,
         description: this.editProjectForm.value.description,
-        active: this.selectedProjectToEdit.active
+        active: this.editProjectForm.value.active
       };
 
       console.log('Submitting updated project:', updatedProject);
@@ -144,7 +146,8 @@ export class ProjectsPageComponent implements OnInit {
     this.selectedProjectToEdit = { ...project };
     this.editProjectForm.setValue({
       projectName: project.name,
-      description: project.description
+      description: project.description,
+      active: project.active ?? true
     });
     
     this.showEditProjectModal = true;
@@ -152,6 +155,15 @@ export class ProjectsPageComponent implements OnInit {
 
   closeEditProjectModal() {
     this.showEditProjectModal = false;
+  }
+
+  toggleActiveDropdown() {
+    this.activeDropdownOpen = !this.activeDropdownOpen;
+  }
+
+  selectActive(value: boolean) {
+    this.editProjectForm.patchValue({ active: value });
+    this.activeDropdownOpen = false;
   }
 
 }

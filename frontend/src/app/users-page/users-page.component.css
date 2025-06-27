@@ -1,13 +1,23 @@
+.user-title {
+    font-size: 36px;
+}
+
+.user-title-container {
+    border-bottom: none;
+}
+
 /* User Table Styling */
 .center-table {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 25px;
+    padding-top: 20px;
 }
 
 .user-table {
+    border: 1px solid #DEB992;
+    border-collapse: separate;
     max-width: 900px;
     width: 100%;
     border-collapse: collapse;
@@ -16,24 +26,28 @@
 
 .user-table th,
 .user-table td {
-    border-bottom: 1px solid #2f3f54;
-    padding: 12px 16px;
+    border: none;
+    padding: 18px 16px;
     text-align: left;
     font-size: 14px;
-    color: #18a39c;
+    color: #DEB992;
+}
+
+.user-table tbody tr {
+    border-top: 1px solid #DEB992;
+    border-bottom: 1px solid #DEB992;
 }
 
 .user-table th {
+    font-size: 20px;
     font-weight: 600;
-    color: #44b6ae;
-    /* tealish header text */
+    color: #FFF;
 }
 
 /* Override for active and admin cells */
 .user-table td.active-status.status-yes,
 .user-table td.admin-status.status-yes {
-    color: #18a39c;
-    /* teal for yes (matches general) */
+    color: #22DD2A;;
     font-weight: bold;
 }
 
@@ -47,7 +61,7 @@
 /* Button Styling */
 .add-user-button {
     margin-top: 50px;
-    margin-left: 350px;
+    margin-left: 485px;
 }
 
 /* Modal Styling */

@@ -8,6 +8,7 @@ export interface TeamDto {
   name: string;
   description: string;
   teammates: BasicUserDto[];
+  projectCount: number;
 }
 
 @Injectable({

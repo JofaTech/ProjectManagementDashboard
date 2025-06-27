@@ -106,3 +106,8 @@ textarea {
     outline: none;
     transition: border-color 0.3s ease;
 }
+
+.teams-title-container {
+    border-bottom: none;
+    font-size: 40px;
+}

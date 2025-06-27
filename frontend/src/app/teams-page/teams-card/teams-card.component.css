@@ -15,16 +15,17 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid #DEB992;
 }
 
 .team-name {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 20px;
     margin-bottom: 6px;
 }
 
 .projects-info {
-    font-size: 12px;
+    font-size: 14px;
     opacity: 0.7;
     margin-bottom: 12px;
 }
@@ -33,6 +34,7 @@
     font-size: 13px;
     text-align: center;
     margin-bottom: 8px;
+    margin-top: 8px;
 }
 
 .members-list {
