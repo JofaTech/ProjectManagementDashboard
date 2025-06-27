@@ -7,7 +7,7 @@
             <h1 class="projects-header header-text">Projects for {{teamName}} </h1>
         </div>
 
-        <div class="new-button-container">
+        <div class="new-button-container" *ngIf="isAdmin">
             <button (click)="openCreateProjectModal()" class="new-button blue-button">New</button>
         </div>
 
@@ -62,7 +62,7 @@
                 <div class="dropdown" (click)="toggleActiveDropdown()" tabindex="0" (blur)="activeDropdownOpen = false">
                     <div class="dropdown-selected">
                         {{ editProjectForm.get('active')?.value === null ? 'Pick an option' :
-                            (editProjectForm.get('active')?.value ? 'Yes' : 'No') }}
+                        (editProjectForm.get('active')?.value ? 'Yes' : 'No') }}
                     </div>
 
                     <div class="dropdown-list" *ngIf="activeDropdownOpen">

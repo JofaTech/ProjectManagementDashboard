@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProjectDto } from '../services/project.dto';
 import { ProjectService } from '../services/project.service';
+import { SharedDataService } from '../shared-data.service';
 
 // interface Project {
 //   id: number;
@@ -17,6 +18,8 @@ import { ProjectService } from '../services/project.service';
   styleUrls: ['./projects-page.component.css']
 })
 export class ProjectsPageComponent implements OnInit {
+  // admin status
+  isAdmin: boolean = false;
 
   // Modal Bools
   showCreateProjectModal = false;
@@ -34,10 +37,11 @@ export class ProjectsPageComponent implements OnInit {
   activeDropdownOpen = false;
 
   constructor(
-    private route: ActivatedRoute, 
-    private router: Router, 
+    private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private sharedDataService: SharedDataService
   ) { }
 
   ngOnInit() {
@@ -46,6 +50,11 @@ export class ProjectsPageComponent implements OnInit {
     this.teamId = +(queryParams.get('id') || 0);
     this.teamName = queryParams.get('name') || 'Unknown Team';
     this.companyId = +(queryParams.get('companyId') || 0);
+
+    // Subscribe to isAdmin
+    this.sharedDataService.isAdmin$.subscribe((adminstatus) => {
+      this.isAdmin = adminstatus;
+    });
 
     // Initialize fields for creating projects
     this.newProjectForm = this.fb.group({
@@ -64,7 +73,7 @@ export class ProjectsPageComponent implements OnInit {
   }
 
   loadProjects(companyId: number, teamId: number) {
-    
+
     this.projectService.getProjectsByTeamId(companyId, teamId).subscribe({
       next: (data) => {
         this.projects = data;
@@ -149,7 +158,7 @@ export class ProjectsPageComponent implements OnInit {
       description: project.description,
       active: project.active ?? true
     });
-    
+
     this.showEditProjectModal = true;
   }
 

@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BasicUserDto } from './basic-user.dto';
-import { UrlSerializer } from '@angular/router';
+import { SharedDataService } from '../shared-data.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserSessionService {
-
   private user: BasicUserDto | null = null;
 
-  constructor() { }
+  constructor(private sharedDataService: SharedDataService) {}
 
   setUser(user: BasicUserDto): void {
     this.user = user;
+    this.sharedDataService.setUser(user);
   }
 
   getUser(): BasicUserDto | null {
@@ -33,6 +33,6 @@ export class UserSessionService {
 
   logout(): void {
     this.user = null;
+    localStorage.clear();
   }
-
 }
