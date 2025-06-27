@@ -4,6 +4,7 @@ import { TeamService, TeamDto } from '../services/team.service';
 import { UserService } from '../services/user.service';
 //import { BasicUserDto } from '../services/basic-user.dto';
 import { FullUserDto } from '../services/full-user.dto';
+import { SharedDataService } from '../shared-data.service';
 
 @Component({
   selector: 'app-teams-page',
@@ -18,25 +19,43 @@ export class TeamsPageComponent implements OnInit {
   selectedMembers: FullUserDto[] = [];
   availableMembers: FullUserDto[] = [];
   showNewTeamModal: boolean = false;
-  companyId = 6; // TODO: need to replace later with real data
+  companyId = 6;
+  isAdmin: boolean = false;
 
   constructor(
     private router: Router,
     private teamService: TeamService,
-    private userService: UserService
+    private userService: UserService,
+    private sharedDataService: SharedDataService
   ) { }
 
   ngOnInit(): void {
-    console.log('ngOnInit is running...');
-    this.teamService.getTeamsByCompanyId(this.companyId).subscribe({
-      next: (data) => this.teams = data,
-      error: (err) => console.error('Error fetching teams: ', err)
-    });
+    const companyId = this.sharedDataService.getSelectedCompanyId();
+    const user = this.sharedDataService.getUser();
+    const isAdmin = this.sharedDataService.getIsAdmin();
 
-    this.userService.getUsersByCompanyId(this.companyId).subscribe({
-      next: (users) => this.availableMembers = users,
-      error: (err) => console.error('Error fetching users: ', err)
-    })
+    if (companyId && user) {
+      this.companyId = companyId;
+      this.isAdmin = isAdmin;
+
+      this.teamService.getTeamsByCompanyId(companyId).subscribe({
+        next: (teams) => {
+          if (this.isAdmin) {
+            this.teams = teams;
+          } else {
+            this.teams = teams.filter(team =>
+              team.teammates.some(member => member.id === user.id)
+            );
+          }
+        },
+        error: (err) => console.error('Error fetching teams: ', err)
+      });
+
+      this.userService.getUsersByCompanyId(companyId).subscribe({
+        next: (users) => this.availableMembers = users,
+        error: (err) => console.error('Error fetching users: ', err)
+      });
+    }
   }
 
   // Routing to projects's page

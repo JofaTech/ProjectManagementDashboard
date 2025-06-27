@@ -11,7 +11,7 @@
         </div>
 
         <!-- New Team card -->
-        <div class="new-team" (click)="openNewTeamModal()">
+        <div *ngIf="isAdmin" class="new-team" (click)="openNewTeamModal()">
             <span class="plus-sign">+</span>
             <span>New Team</span>
         </div>
