@@ -64,3 +64,4 @@ export class SharedDataService {
     return this._selectedCompanyId.getValue();
   }
 }
+ 
