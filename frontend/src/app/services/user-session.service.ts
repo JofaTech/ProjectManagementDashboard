@@ -11,19 +11,19 @@ export class UserSessionService {
 
   constructor() { }
 
-  setUser(user:BasicUserDto):void{
-    this.user=user;
+  setUser(user: BasicUserDto): void {
+    this.user = user;
   }
-  
-  getUser():BasicUserDto | null{
+
+  getUser(): BasicUserDto | null {
     return this.user;
   }
 
-  isLoggedIn():boolean {
+  isLoggedIn(): boolean {
     return this.user != null;
   }
 
-  isAdmin():boolean{
+  isAdmin(): boolean {
     if (this.user && this.user.admin) {
       return true;
     } else {
@@ -31,8 +31,8 @@ export class UserSessionService {
     }
   }
 
-  logout():void{
-    this.user=null;
+  logout(): void {
+    this.user = null;
   }
-  
+
 }

@@ -3,10 +3,12 @@ package com.cooksys.groupfinal.services;
 import java.util.Set;
 
 import com.cooksys.groupfinal.dtos.AnnouncementDto;
+import com.cooksys.groupfinal.dtos.BasicUserDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
 import com.cooksys.groupfinal.dtos.TeamDto;
 import com.cooksys.groupfinal.dtos.UserRequestDto;
+import com.cooksys.groupfinal.entities.Company;
 import com.cooksys.groupfinal.dtos.CompanyDto;
 
 public interface CompanyService {
@@ -23,7 +25,7 @@ public interface CompanyService {
 
 	TeamDto postTeamToCompany(Long companyId, TeamDto teamDto);
 
-    FullUserDto addUser(Long id, UserRequestDto uRequestDto);
+	FullUserDto addUser(Long id, UserRequestDto uRequestDto);
 
 	AnnouncementDto addAnnouncement(Long id, AnnouncementDto aDto);
 
@@ -32,6 +34,9 @@ public interface CompanyService {
 	void deleteAnnouncement(Long companyId, Long announcementId);
 
 	Set<CompanyDto> getAllCompanies();
+
+	// Get all companies associated with user
+	Set<CompanyDto> getCompaniesByUser(Long user);
 
 	CompanyDto getCompanyById(Long id);
 

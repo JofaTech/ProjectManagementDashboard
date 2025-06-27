@@ -1,38 +1,12 @@
 import { Component, Input } from '@angular/core';
-
-// Profile interface
-interface Profile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-}
-
-// Basicuser interface
-interface BasicUser {
-  id: number;
-  profile: Profile;
-  isAdmin: boolean;
-  active: boolean;
-  status: string;
-}
-
-// Announcement interface
-interface Announcement {
-  id: number;
-  date: number; // timestamp
-  title: string;
-  message: string;
-  author: BasicUser;
-}
-
+import { AnnouncementDto } from 'src/app/services/announcement.dto';
 @Component({
   selector: 'app-announcement-card',
   templateUrl: './announcement-card.html',
   styleUrls: ['./announcement-card.css']
 })
 export class AnnouncementCard {
-  @Input() announcement!: Announcement;
+  @Input() announcement!: AnnouncementDto;
 
   get formattedDate(): string {
     // Format date
@@ -51,3 +25,4 @@ export class AnnouncementCard {
     return `${profile.firstName} ${profile.lastName}, ${author.status}`;
   }
 }
+
