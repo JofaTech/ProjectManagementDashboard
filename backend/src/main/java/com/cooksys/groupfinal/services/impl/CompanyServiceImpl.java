@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.cooksys.groupfinal.dtos.AnnouncementDto;
+import com.cooksys.groupfinal.dtos.BasicUserDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
 import com.cooksys.groupfinal.dtos.TeamDto;
@@ -219,6 +220,11 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyMapper.entityToDto(
 				companyRepository.findById(id)
 						.orElseThrow(() -> new NotFoundException("Company with ID " + id + " not found.")));
+	}
+
+	@Override
+	public Set<CompanyDto> getCompaniesByUser(Long user) {
+		return companyMapper.entitiesToDtos(companyRepository.findByEmployees_Id(user));
 	}
 
 }

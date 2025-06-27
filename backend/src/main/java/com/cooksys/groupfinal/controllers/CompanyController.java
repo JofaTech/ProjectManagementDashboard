@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.cooksys.groupfinal.dtos.CompanyDto;
 import com.cooksys.groupfinal.dtos.AnnouncementDto;
+import com.cooksys.groupfinal.dtos.BasicUserDto;
 import com.cooksys.groupfinal.dtos.FullUserDto;
 import com.cooksys.groupfinal.dtos.ProjectDto;
 import com.cooksys.groupfinal.dtos.TeamDto;
@@ -25,9 +26,7 @@ import com.cooksys.groupfinal.dtos.UserRequestDto;
 import com.cooksys.groupfinal.services.AnnouncementService;
 import com.cooksys.groupfinal.services.CompanyService;
 
-
 import lombok.RequiredArgsConstructor;
-
 
 @RestController
 @RequestMapping("/company")
@@ -37,7 +36,8 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping("/{id}/users")
-    public Set<FullUserDto> getAllUsers(@PathVariable Long id, @RequestParam(defaultValue = "false") boolean onlyActive) {
+    public Set<FullUserDto> getAllUsers(@PathVariable Long id,
+            @RequestParam(defaultValue = "false") boolean onlyActive) {
         return companyService.getAllUsers(id, onlyActive);
     }
 
@@ -66,19 +66,20 @@ public class CompanyController {
 
     // @GetMapping("/{id}/teams")
     // public Set<TeamDto> getAllTeams(@PathVariable Long id) {
-    //     return companyService.getAllTeams(id);
+    // return companyService.getAllTeams(id);
     // }
 
     @GetMapping("/{companyId}/teams")
     public Set<TeamDto> getCompanyTeams(@PathVariable Long companyId) {
         return companyService.getCompanyTeams(companyId);
     }
-    //post mappings
+
+    // post mappings
     @PostMapping("/{companyId}/teams")
     public TeamDto postTeamToCompany(@PathVariable Long companyId, @RequestBody TeamDto teamDto) {
         return companyService.postTeamToCompany(companyId, teamDto);
     }
-    
+
     @DeleteMapping("/{companyId}/teams/{teamId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeTeam(@PathVariable Long companyId, @PathVariable Long teamId) {
@@ -90,7 +91,7 @@ public class CompanyController {
         return companyService.getAllProjects(companyId, teamId);
     }
 
-    //new routes because we need to get companies that exist in the db
+    // new routes because we need to get companies that exist in the db
     @GetMapping("/{id}")
     public CompanyDto getCompanyById(@PathVariable Long id) {
         return companyService.getCompanyById(id);
@@ -100,4 +101,10 @@ public class CompanyController {
     public Set<CompanyDto> getAllCompanies() {
         return companyService.getAllCompanies();
     }
+
+    @GetMapping("/user/{userId}")
+    public Set<CompanyDto> getMethodName(@PathVariable Long userId) {
+        return companyService.getCompaniesByUser(userId);
+    }
+
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedDataService } from '../shared-data.service';
+import { BasicUserDto } from '../services/basic-user.dto';
+import { Subscription } from 'rxjs';
 
 // company interface
 interface Company {
@@ -18,15 +20,42 @@ export class SelectCompanyPageComponent implements OnInit {
   companies: Company[] = [];
   selectedCompany: number | null = null;
 
+  // User that is logged in
+  userId!: number | undefined;
+
+  // Admin status
+  isAdmin: boolean = false;
+
+  private userSub!: Subscription;
+
   selectedCompanyName: string = '';
 
   constructor(private router: Router, private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void {
-    this.fetchCompanies();
+    this.userSub = this.sharedDataService.user$.subscribe((user: BasicUserDto | null) => {
+      if (user) {
+        this.userId = user.id;
+        this.isAdmin = user.admin;
+        console.log('User updated:', user);
+        console.log('Admin status updated:', this.isAdmin)
+
+        // Fetch companies on user change
+        this.isAdmin ? this.fetchCompaniesAdmin() : this.fetchCompaniesUser();
+      }
+    })
+
+    // this.isAdmin = this.sharedDataService.getIsAdmin();
+    // this.userId = this.sharedDataService.getUser()?.id;
+
+    // if (this.isAdmin) {
+    //   this.fetchCompaniesAdmin();
+    // } else {
+    //   this.fetchCompaniesUser();
+    // }
   }
 
-  fetchCompanies() {
+  fetchCompaniesAdmin() {
     fetch('http://localhost:4200/company')
       .then(response => {
         if (!response.ok) {
@@ -40,6 +69,27 @@ export class SelectCompanyPageComponent implements OnInit {
       .catch(err => {
         console.error('Error fetching companies:', err);
       });
+  }
+
+  fetchCompaniesUser() {
+    // Validate user ID
+    if (this.userId === undefined) {
+      console.error('Invalid user ID');
+      return;
+    }
+
+    // fetch corresponding companies
+    fetch(`http://localhost:4200/company/user/${this.userId}`)
+      .then(res => res.json())
+      .then((data: Company[]) => {
+        console.log('Cmpanies fetched:', data);
+        this.companies = data;
+      })
+      .catch(err => {
+        console.error('Error fetching companies by user:', err);
+      })
+
+
   }
 
   onCompanyChange(event: Event): void {

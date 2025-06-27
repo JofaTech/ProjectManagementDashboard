@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedDataService } from '../shared-data.service';
 import { BasicUserDto } from '../services/basic-user.dto';
 import { AnnouncementDto } from '../services/announcement.dto';
+import { UserSessionService } from '../services/user-session.service';
 
 @Component({
   selector: 'app-announcements-page',
@@ -20,7 +21,7 @@ export class AnnouncementsPageComponent implements OnInit {
   // Modal info
   showCreateAnnouncementModal = false;
 
-  constructor(private sharedDataService: SharedDataService) { }
+  constructor(private sharedDataService: SharedDataService, private userSession: UserSessionService) { }
 
   ngOnInit(): void {
     this.fetchAnnouncements();
@@ -44,17 +45,12 @@ export class AnnouncementsPageComponent implements OnInit {
     }
 
     // Hard-code author for now
-    const author: BasicUserDto = {
-      id: 18,
-      profile: {
-        firstName: 'Greg',
-        lastName: 'Hirsch',
-        email: 'ghirsch@email.com',
-        phone: '(000) 000-0000'
-      },
-      isAdmin: false,
-      active: true,
-      status: 'PENDING'
+    const author: BasicUserDto | null = this.sharedDataService.getUser();
+
+    // check if user is null
+    if (author === null) {
+      console.error('No active user');
+      return;
     }
 
     // Create announcement 

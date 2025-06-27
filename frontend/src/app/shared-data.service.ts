@@ -44,7 +44,7 @@ export class SharedDataService {
   // isAdmin Getters and Setters
   setIsAdmin(): void {
     const user = this.getUser();
-    const isAdmin = user?.isAdmin ?? false;
+    const isAdmin = user?.admin ?? false;
     localStorage.setItem(this.ADMIN_STORAGE_KEY, String(isAdmin));
     this._isAdmin.next(isAdmin);
   }
