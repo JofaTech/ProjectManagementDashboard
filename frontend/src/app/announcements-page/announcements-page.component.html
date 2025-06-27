@@ -3,7 +3,7 @@
 
     <div class="page-title">
         <h2 class="header-text">Announcements</h2>
-        <div class="button-row">
+        <div class="button-row" *ngIf="isAdmin">
             <button class="new-button" (click)="openCreateAnnouncement()">New</button>
         </div>
     </div>

@@ -21,10 +21,18 @@ export class AnnouncementsPageComponent implements OnInit {
   // Modal info
   showCreateAnnouncementModal = false;
 
+  // Admin status:
+  isAdmin: boolean = false;
+
   constructor(private sharedDataService: SharedDataService, private userSession: UserSessionService) { }
 
   ngOnInit(): void {
     this.fetchAnnouncements();
+
+    // update admin status:
+    this.sharedDataService.isAdmin$.subscribe((adminStatus) => {
+      this.isAdmin = adminStatus;
+    })
   }
 
   openCreateAnnouncement() {
@@ -44,7 +52,7 @@ export class AnnouncementsPageComponent implements OnInit {
       return;
     }
 
-    // Hard-code author for now
+    // User pulled from shared data Service
     const author: BasicUserDto | null = this.sharedDataService.getUser();
 
     // check if user is null
